@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   dart_frog: ^0.2.0
-  flutter_dotenv: ^5.0.2
+  dotenv: ^4.0.1
   mongo_dart: ^0.7.4+1
 
 dev_dependencies:
