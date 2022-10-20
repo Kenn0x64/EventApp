@@ -1,18 +1,35 @@
 const user=require("../models/user")
+require("express")
 
 module.exports.createUser= async(req,res)=>{
-    new user
-
+    let newUser= await new user({
+        ...req.body.userdata
+    }).save()
 }
 
 module.exports.deleteUser= async(req,res)=>{
+    //implement 
+    //Delete every event With The Id of of user
+    //await event.findByIdAndDelete(req.params.eventId)
 
+    await  user.findByIdAndDelete(req.body.id)
+    res.send(true)
 }
 
-module.exports.updateUser= async(req,res)=>{
-
+module.exports.preUpdateUser= async(req,res)=>{
+    res.send(await user.find({'_id':req.body.id}))
 }
 
-module.exports.viewUser= async(req,res)=>{
+module.exports.postupdateUser= async(req,res)=>{
+    await user.findByIdAndUpdate(req.body.id,req.body.userdata)
+    // res.redirect()
+}
 
+
+module.exports.getUser= async(req,res)=>{
+    res.send(await user.find({'_id':req.body.id}))
+}
+
+module.exports.getUsers= async(req,res)=>{
+    res.send(await user.find({}))
 }

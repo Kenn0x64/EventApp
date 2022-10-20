@@ -1,13 +1,22 @@
-let express = require("express")
-let app= express();
+require("./utils/database")
+let express = require("express");
+const { createEvent, deleteEvent, preUpdateEvent, postUpdateEvent, getEvent,getEvents } = require("./controllers/event");
+const { deleteUser, preUpdateUser, postupdateUser, createUser } = require("./controllers/user");
+let app = express();
 
-app.get('/43',(req,res)=>{
-    console.log("X")
 
+
+const user=require("./models/user")
+
+app.use(express.json());
+
+
+app.get('/:eventId',async (req, res)  => {
+    // getEvents(req,res)
+    // preUpdateEvent(req,res)
+    // res.send()
 })
 
-port=process.env.PORT | 3000
-
-app.listen(port,()=>{
-    console.log("X")
+app.listen( process.env.PORT, () => {
+    console.log("\u2705 Startred Server!")
 })

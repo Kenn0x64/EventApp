@@ -1,33 +1,40 @@
-const {Schema} = require("mongoose");
+const { Schema } = require("mongoose");
 const mongoose = require("mongoose");
 
-const eventSchema= new Schema({
-    eventName:{
-        type:String,
-        required:[true,'Event Name Required']
+const eventSchema = new Schema({
+    eventName: {
+        type: String,
+        required: [true, 'Event Name Required']
     },
-    eventOwner:{
-        type:String,
-        required:[true,'Event Owner Required']
+    eventMembers: {
+        type: [String],
     },
-    eventMembers:{
-        type:[String],
-        // required:[true,'Event Members Required'],
+    invitedMembers: {
+        type: [String],
     },
-    invitedMembers:{
-        type:[String],
-        // required:[true,'Event Members Required'],
+    startDateTime: {
+        type: Date,
+        required: [true, "Start Date & Tine Required"]
     },
-    ownerId:{
-        type:Schema.Types.ObjectId,
-        required:[true,'OwnerId Required']
+    endDateTime: {
+        type: Date,
+        required: [true, "Start Date & Tine Required"]
     },
-    startDateTime:{
-        type:Date,
-        required: [true,"Start Date & Tine Required"]},
-    endDateTime:{
-        type:Date,
-        required: [true,"Start Date & Tine Required"]}
+    owner:{
+        ownerId: {
+            type: Schema.Types.ObjectId,
+            ref: 'users',
+            required: [true, 'Invaild host Id'],
+        },
+        eventOwnerName: {
+            type: String,
+            required: [true, 'Event Owner Required']
+        },
+        
+    }
 })
 
-module.exports=mongoose.model("eventModel",eventSchema);
+module.exports = mongoose.model("events", eventSchema);
+
+
+

@@ -6,5 +6,5 @@ import '../../models/user.dart';
 
 Future<Response> onRequest(RequestContext context) async {
   await UserOps.createUser({'firstName': 'test1', 'secondName': 'test2'});
-  return Response.json(body: {'name':'ishikawa'});
+  return Response.json({'name':'jack'});
 }

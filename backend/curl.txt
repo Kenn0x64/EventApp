@@ -1,0 +1,7 @@
+  curl -X GET http://localhost:3000/1 -H 'Content-Type: application/json' -d '{"userdata":{"fullName":"admin","email":"admin@admin.admin","password":"admin"}}'
+
+
+
+curl -X GET http://localhost:3000/6350a31f89667c44e24ae526  -H 'Content-Type: application/json' -d '{
+"eventdata":{"eventName":"test","eventMembers":["alan"],"invitedMembers":["azad","alan"],
+"startDateTime":"Wed Oct 19 2022 23:25:59 GMT+0300 (Arabian Standard Time)","endDateTime":"Wed Oct 19 2022 23:25:59 GMT+0300 (Arabian Standard Time)"}}'
