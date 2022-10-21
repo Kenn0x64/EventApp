@@ -3,7 +3,6 @@
 
 ## Backend-Todos 
 -Controllers(Login & Logout)<br>
--Routes<br>
 -Expection Handling<br>
 -Indepth Data Vaildation -JOI <br>
 -Session <br>
