@@ -1,7 +1,7 @@
 # EventApp
+<p> A app for hosting events and inviting people </p>  
 
-### Backend
-
+## Backend-Todos 
 -Controllers(Login & Logout)<br>
 -Routes<br>
 -Expection Handling<br>
@@ -12,7 +12,7 @@
 -QR Code Genrator <br>
 
 
-### Flutter App
+## Flutter App
 
 #### [Not Planned]
 
