@@ -8,7 +8,7 @@
 -Indepth Data Vaildation -JOI <br>
 -Session <br>
 -Middleweres (IsLoggedIn & IsOwner & Vaildation ...etc ) <br>
--Tests (Optional) <br>
+-Testing (Optional) <br>
 -QR Code Genrator <br>
 
 
