@@ -13,9 +13,16 @@
 
 
 ## Flutter App
-
-#### [Not Planned]
-
+### Screens
+-Login<br>
+-Home<br>
+-SignUp<br>
+-View-Edit User<br>
+-Invited Users<br>
+-Event Members<br>
+-Event Home<br>
+-Event Createtion<br>
+-View-Edit Event <br>
 
 
 
