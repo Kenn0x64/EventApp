@@ -2,26 +2,26 @@
 <p> A app for hosting events and inviting people </p>  
 
 ## Backend-Todos 
--JWT Authintication <br>
--Controllers(Login & Logout)<br>
--Expection Handling<br>
--Indepth Data Vaildation -JOI <br>
--Middleweres (IsLoggedIn & IsOwner & isnewEmail & Vaildation ...etc ) <br>
--QR Code Genrator <br>
--Testing (Optional) <br>
+- JWT Authintication 
+- Controllers(Login & Logout)
+- Expection Handling
+- Indepth Data Vaildation -JOI
+- Middleweres (IsLoggedIn & IsOwner & isnewEmail & Vaildation ...etc )
+- QR Code Genrator
+- Testing (Optional)
 
 
 ## Flutter App
 ### Screens
--Login<br>
--Home<br>
--SignUp<br>
--View-Edit User<br>
--Invited Users<br>
--Event Members<br>
--Event Home<br>
--Event Createtion<br>
--View-Edit Event <br>
+- Login
+- Home
+- SignUp
+- View-Edit User
+- Invited Users
+- Event Members
+- Event Home
+- Event Createtion
+- View-Edit Event
 
 
 
