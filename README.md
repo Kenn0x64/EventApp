@@ -2,7 +2,7 @@
 <p> A app for hosting events and inviting people </p>  
 
 ## Backend-Todos 
--Authintication <br>
+-JWT Authintication <br>
 -Controllers(Login & Logout)<br>
 -Expection Handling<br>
 -Indepth Data Vaildation -JOI <br>
