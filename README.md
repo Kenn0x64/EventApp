@@ -7,7 +7,7 @@
 -Expection Handling<br>
 -Indepth Data Vaildation -JOI <br>
 -Session <br>
--Middleweres (IsLoggedIn & IsOwner & Vaildation ...etc ) <br>
+-Middleweres (IsLoggedIn & IsOwner & isnewEmail & Vaildation ...etc ) <br>
 -QR Code Genrator <br>
 -Testing (Optional) <br>
 
