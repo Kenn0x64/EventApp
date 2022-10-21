@@ -1,8 +1,9 @@
-const user=require("../models/user")
 require("express")
+const user=require("../models/user")
+
 
 module.exports.createUser= async(req,res)=>{
-    let newUser= await new user({
+    await new user({
         ...req.body.userdata
     }).save()
 }
@@ -16,11 +17,7 @@ module.exports.deleteUser= async(req,res)=>{
     res.send(true)
 }
 
-module.exports.preUpdateUser= async(req,res)=>{
-    res.send(await user.find({'_id':req.body.id}))
-}
-
-module.exports.postupdateUser= async(req,res)=>{
+module.exports.updateUser= async(req,res)=>{
     await user.findByIdAndUpdate(req.body.id,req.body.userdata)
     // res.redirect()
 }
@@ -32,4 +29,11 @@ module.exports.getUser= async(req,res)=>{
 
 module.exports.getUsers= async(req,res)=>{
     res.send(await user.find({}))
+}
+
+module.exports.login=async()=>{
+
+}
+module.exports.logout=async()=>{
+    
 }

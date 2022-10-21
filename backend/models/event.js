@@ -6,8 +6,23 @@ const eventSchema = new Schema({
         type: String,
         required: [true, 'Event Name Required']
     },
-    eventMembers: {
-        type: [String],
+    description: {
+        type: String,
+        required: [true, 'Discription Required']
+    },
+    location: {
+        type: String,
+        required: [true, 'Event Location Required']
+    },
+    eventMembers:
+    {
+        type: [{
+            memberId: {
+                type: Schema.Types.ObjectId,
+                ref: 'users',
+                required: [true, 'Invaild member Id'],
+            }
+        }]
     },
     invitedMembers: {
         type: [String],
@@ -20,17 +35,10 @@ const eventSchema = new Schema({
         type: Date,
         required: [true, "Start Date & Tine Required"]
     },
-    owner:{
-        ownerId: {
-            type: Schema.Types.ObjectId,
-            ref: 'users',
-            required: [true, 'Invaild host Id'],
-        },
-        eventOwnerName: {
-            type: String,
-            required: [true, 'Event Owner Required']
-        },
-        
+    ownerId: {
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+        required: [true, 'Invaild host Id'],
     }
 })
 

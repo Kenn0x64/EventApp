@@ -1,22 +1,18 @@
-require("./utils/database")
-let express = require("express");
-const { createEvent, deleteEvent, preUpdateEvent, postUpdateEvent, getEvent,getEvents } = require("./controllers/event");
-const { deleteUser, preUpdateUser, postupdateUser, createUser } = require("./controllers/user");
-let app = express();
+const database =require("./utils/database")
+const express = require("express");
+const userRouter=require("./routers/user")
+const eventRouter=require("./routers/event")
+const app = express();
 
-
-
-const user=require("./models/user")
-
+//middleweres
 app.use(express.json());
 
 
-app.get('/:eventId',async (req, res)  => {
-    // getEvents(req,res)
-    // preUpdateEvent(req,res)
-    // res.send()
-})
+//Routers
+app.use('/user',userRouter)
+app.use('/event',eventRouter)
 
 app.listen( process.env.PORT, () => {
-    console.log("\u2705 Startred Server!")
+    const PORT=process.env.PORT | 3000
+    console.log(`\u2705 Startred Server! [http://localhost:${PORT}/]`)
 })
