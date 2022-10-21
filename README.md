@@ -8,8 +8,8 @@
 -Indepth Data Vaildation -JOI <br>
 -Session <br>
 -Middleweres (IsLoggedIn & IsOwner & Vaildation ...etc ) <br>
--Testing (Optional) <br>
 -QR Code Genrator <br>
+-Testing (Optional) <br>
 
 
 ## Flutter App
