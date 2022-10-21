@@ -2,10 +2,10 @@
 <p> A app for hosting events and inviting people </p>  
 
 ## Backend-Todos 
+-Authintication <br>
 -Controllers(Login & Logout)<br>
 -Expection Handling<br>
 -Indepth Data Vaildation -JOI <br>
--Session <br>
 -Middleweres (IsLoggedIn & IsOwner & isnewEmail & Vaildation ...etc ) <br>
 -QR Code Genrator <br>
 -Testing (Optional) <br>
