@@ -13,6 +13,10 @@ const userSchema= new Schema({
     password:{
         type:String,
         required:[true,'Password Required'],
+    },
+    joinedEvents:{
+        type: [Schema.Types.ObjectId],
+        ref: 'events',
     }
 })
 
