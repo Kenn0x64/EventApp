@@ -6,6 +6,7 @@ const app = express();
 
 //middleweres
 app.use(express.json());
+app.use('/uploads',express.static(__dirname,'/public'))
 
 
 //Routers

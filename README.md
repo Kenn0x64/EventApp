@@ -2,7 +2,10 @@
 <p> A app for hosting events and inviting people </p>  
 
 ## Backend-Todos 
-- Invite logic 
+- Update Docs & Routes
+- Add Image MVC
+- Add Invite MVC
+- Update Rest Of The MVCs 
 - JWT Authintication 
 - Controllers(Login & Logout)
 - Expection Handling
