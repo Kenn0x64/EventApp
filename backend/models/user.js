@@ -1,40 +1,48 @@
 const { number } = require("joi");
-const {Schema} = require("mongoose");
 const mongoose = require("mongoose");
-const imageSchma= require("../models/image")
 
-const userSchema= new Schema({
-    profilPic:{
-        type:imageSchma,
-        required:[true,'Profil Picture Is Required']
+const userSchema= new mongoose.Schema({
+    profilePic:{
+        fileName:{
+            type:String,
+            unique:true,
+        },
+        url:String,
     },
     fullName:{
         type:String,
-        required:[true,' FullName Required']
+        required:[true,' Invaild FullName']
     },
     email:{
         type:String,
-        required:[true,'Email Required']
+        required:[true,'Invaild Email'],
+        unique:true,
+        lowercase:true,
     },
     phoneNumber:{
         type:Number,
-        required:[true,'Phone Number Required']
+        unique:true,
+        required:[true,'Invaild Phone Number']
     },
     password:{
         type:String,
-        required:[true,'Password Required'],
+        required:[true,'Invaild Password'],
     },
     bio:{
         type:String,
-        required:[true,'Profile Bio Is Required'],
+        required:[true,'Invaild Profile Bio'],
     },
     joinedEvents:{
-        type: [Schema.Types.ObjectId],
+        type: [mongoose.Schema.Types.ObjectId],
         ref: 'events',
     },
     recivedInvites:{
-        type: [Schema.Types.ObjectId],
+        type: [mongoose.Schema.Types.ObjectId],
         ref: 'invites',
+    },
+    pendingInvites:{
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'events',
     }
 })
 

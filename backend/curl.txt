@@ -1,1 +1,21 @@
 curl -X GET http://localhost:3000/user/profile -H 'Content-Type: application/json' -d '{"id":"635092b645387827ae510024"}'
+-----------------------------
+create user
+{
+    "userdata":
+    {
+        "profilePic":
+        {
+            "fileName":"default.png",
+            "url":"/uploads/images/"
+        },
+        "fullName":"Admin",
+        "email":"admin@admin.com",
+        "phoneNumber":"3435345",
+        "password":"admin",
+        "bio":"Its Admin"
+    }
+    
+}
+--------------------------------
+

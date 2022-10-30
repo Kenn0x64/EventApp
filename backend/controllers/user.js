@@ -1,39 +1,89 @@
-require("express")
-const user=require("../models/user")
+const express = require("express")()
+const crypto = require("crypto")
+const user = require("../models/user")
+const token_collection = require("../models/token")
+const RESPONSE = require("../utils/express_api_res")
+const { hashSync, compareSync } = require('bcrypt')
+const jwt = require("jsonwebtoken")
+const event = require("../models/event")
+const eventCons = require('../controllers/event')
+require('../utils/delete_from_arr')
 
 
-module.exports.createUser= async(req,res)=>{
-    await new user({
-        ...req.body.userdata
+
+module.exports.createUser = async (req, res) => {
+    //test
+    await user.findOneAndDelete({'email':req.body.userdata.email})
+    
+    let newuser = await new user({
+        ...req.body.userdata,
+        password: hashSync(req.body.userdata.password, 10)
     }).save()
+    
+    res.send(RESPONSE(res.statusMessage, res.statusCode, "User Created"))
 }
 
-module.exports.deleteUser= async(req,res)=>{
-    //implement 
-    //Delete every event With The Id of of user
-    //await event.findByIdAndDelete(req.params.eventId)
+module.exports.deleteUser = async (req, res) => {
+    //delete user from all events -> done
+    //delete any events that current user owns
+    //delete invites
+    //delete all images in uploads
 
-    await  user.findByIdAndDelete(req.body.id)
-    res.send(true)
+    let userid = req.logedinUser.id
+    removeUserFormEvents(userid)
+    await event.findOne(userid)
+    
+    await invite.findByIdAndDelete(userid)
+    await user.findByIdAndDelete(userid)
+
+    res.send(RESPONSE(res.statusMessage, res.statusCode, "User Deleted"))
 }
 
-module.exports.updateUser= async(req,res)=>{
-    await user.findByIdAndUpdate(req.body.id,req.body.userdata)
+module.exports.updateUser = async (req, res) => {
+    await user.findByIdAndUpdate(req.body.id, req.body.userdata)
     // res.redirect()
 }
 
 
-module.exports.getUser= async(req,res)=>{
-    res.send(await user.find({'_id':req.body.id}))
+module.exports.getUser = async (req, res) => {
+    res.send(await user.find({ '_id': req.body.id }))
 }
 
-module.exports.getUsers= async(req,res)=>{
+module.exports.getUsers = async (req, res) => {
     res.send(await user.find({}))
 }
 
-module.exports.login=async()=>{
+module.exports.login = async (req, res) => {
+    let loginUser = await user.findOne({ 'email': req.body.userdata.email })
 
+    if (!loginUser) {
+        return res.send("User Not Found")
+    }
+    if (!compareSync(req.body.userdata.password, user.password)) {
+        return res.send("Incorrect Email or Password ")
+    }
+
+    let AT = jwt.sign({
+        id: loginUser._id
+    }, process.env.ACCESS_TOKEN, { expiresIn: "5m", algorithm: "HS512" })
+
+    let RT = jwt.sign({
+        email: loginUser.email,
+        id: loginUser._id
+    }, process.env.REFRESH_TOKEN, { expiresIn: "2w", algorithm: "HS512" })
+
+    await new token_collection({
+        'userId': loginUser._id,
+        'RT': RT,
+    }).save()
+
+    res.sendStatus(203).send({
+        AT: "Bearer " + AT,
+        RT: "Bearer " + RT
+    })
 }
-module.exports.logout=async()=>{
-    
+
+module.exports.logout = async (req, res) => {
+    await token_collection.findOneAndDelete({ 'userId': req.logedinUser.id })
+    res.sendStatus(203)
 }

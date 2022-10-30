@@ -1,23 +1,28 @@
-const { Schema } = require("mongoose");
 const mongoose = require("mongoose");
 
-
-module.exports=mongoose.model('invites',new Schema({
-    eventname:{
+const inviteSchma=new mongoose.Schema({
+    eventName:{
         type:String,
-        required:[true,' Invite Eventname Is Required']
+        required:[true,'Invaild Eventname']
     },
-    description:{
-        type:String,
-        required:[true,'Invite Description Required']
-    },
-    invitetime: {
+    inviteTime: {
         type: Date,
-        required: [true, "invitetime Required"]
+        required: [true, "Invaild Invite Time"]
+    },
+    deepLink:{
+        type:String,
+    },
+    invitedUserId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+        required: [true, 'Invaild UserId'],
     },
     eventId: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'events',
-        required: [true, 'Invaild event Id'],
+        required: [true, 'Invaild EventId'],
     }
-}))
+})
+
+
+module.exports=mongoose.model('invites',inviteSchma)

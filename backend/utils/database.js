@@ -1,8 +1,6 @@
 let mongoose = require("mongoose")
-if(process.env.NODE_ENV !== "production")
-{
-    require('dotenv').config()
-}
+require('dotenv').config()
+
 mongoose.connect(process.env.DB_URI).then(() => {
     console.log("\u2705 Database Connection Sucsessful!");
 }).catch((e) => {

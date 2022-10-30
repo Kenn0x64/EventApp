@@ -1,45 +1,49 @@
-const { Schema } = require("mongoose");
 const mongoose = require("mongoose");
-const imageSchma= require("../models/image")
 
-
-const eventSchema = new Schema({
+const eventSchema = new mongoose.Schema({
     eventPic:{
-        type:imageSchma,
-        required:[true,'Event Picture Is Required']
+        fileName:{
+            type:String,
+            unique:true,
+        },
+        url:String,
     },
     title: {
         type: String,
-        required: [true, 'Event Name Required']
+        required: [true, 'Invaild Event Name']
     },
     description: {
         type: String,
-        required: [true, 'Discription Required']
+        required: [true, 'Invaild Discription']
     },
     location: {
         type: String,
-        required: [true, 'Event Location Required']
+        required: [true, 'Invaild Event Location']
     },
     startDateTime: {
         type: Date,
-        required: [true, "Start Date & Time Required"]
+        required: [true, "Invaild Start Date&Time"]
     },
     endDateTime: {
         type: Date,
-        required: [true, "End Date & Time Required"]
+        required: [true, "Invaild End Date&Time"]
     },
     ownerId: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'users',
-        required: [true, 'Invaild host Id'],
+        required: [true, 'Invaild OwnerId'],
     },
     eventMembers:{
-        type: [Schema.Types.ObjectId],
+        type: [mongoose.Schema.Types.ObjectId],
         ref: 'users',
-        required: [true, 'Invaild member Id'],
+        required: [true, 'Invaild MemberId'],
     },
     invitedMembers: {
-        type: [Schema.Types.ObjectId],
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'users'
+    },
+    waitingForInvites: {
+        type: [mongoose.Schema.Types.ObjectId],
         ref: 'users'
     }
 })
