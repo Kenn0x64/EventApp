@@ -2,7 +2,7 @@
 <p> A app for hosting events and inviting people </p>  
 
 ## Backend-Todos 
-- Controllers{User-Event-Invite}
+- Controllers [User-Event-Invite]
 - Expection Handling
 - Indepth Data Vaildation & Sanitazation
 - Middleweres (IsOwner & Vaildation ...etc )
