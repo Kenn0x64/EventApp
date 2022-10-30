@@ -6,7 +6,7 @@
 - Controllers [User-Event-Invite]
 - Expection Handling
 - Indepth Data Vaildation & Sanitazation
-- Middleweres (IsOwner & Vaildation ...etc )
+- Middleweres (IsOwner ...etc )
 - QR Code Genrator
 - Testing (Optional)
 
