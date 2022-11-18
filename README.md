@@ -2,6 +2,7 @@
 <p> App for hosting events and inviting people </p>  
 
 ## Backend-Todos 
+- Session Identification
 - Certificate Collection
 - Manual Test
 - Images

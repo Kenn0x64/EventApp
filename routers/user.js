@@ -11,7 +11,7 @@ router.route('/login').post(user.login)
 router.route('/profile').get(authJWT_AT,user.getUser)
 router.route('/update').put(authJWT_AT,user.updateUser)
 router.route('/delete').delete(authJWT_AT,user.deleteUser)
-router.route('/logout').get(authJWT_RT,user.logout)
+router.route('/logout').post(authJWT_RT,user.logout)
 
 
 module.exports=router

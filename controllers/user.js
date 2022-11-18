@@ -17,7 +17,7 @@ module.exports.createUser = async (req, res) => {
     
     let newuser = await new user({
         ...req.body.userdata,
-        password: hashSync(req.body.userdata.password, 10)
+        password: hashSync(req.body.userdata.password, 12)
     }).save()
     
     res.send(RESPONSE(res.statusMessage, res.statusCode, "User Created"))
@@ -59,7 +59,7 @@ module.exports.login = async (req, res) => {
     if (!loginUser) {
         return res.send("User Not Found")
     }
-    if (!compareSync(req.body.userdata.password, user.password)) {
+    if (!compareSync(req.body.userdata.password, loginUser.password)) {
         return res.send("Incorrect Email or Password ")
     }
 
@@ -77,13 +77,13 @@ module.exports.login = async (req, res) => {
         'RT': RT,
     }).save()
 
-    res.sendStatus(203).send({
+    res.send(RESPONSE(res.statusMessage,res.statusCode,{
         AT: "Bearer " + AT,
         RT: "Bearer " + RT
-    })
+    }))
 }
 
 module.exports.logout = async (req, res) => {
-    await token_collection.findOneAndDelete({ 'userId': req.logedinUser.id })
-    res.sendStatus(203)
+    let anything=await token_collection.deleteMany({ 'userId': req.logedinUser.id })    
+    res.send(RESPONSE(res.statusMessage, res.statusCode,anything.deletedCount<=0?"No Sessions To LogOut":"Loged Out"))
 }

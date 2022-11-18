@@ -1,8 +1,7 @@
-function RESPONSE(status,code,message,result) {
+function RESPONSE(status,code,result) {
     return {
         Status:status,
         StatusCode:code,
-        Message:message,
         Result:result
     }
 }

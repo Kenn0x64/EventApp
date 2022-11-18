@@ -7,8 +7,6 @@ function authJWT_RT(req, res, next) {
     let token = authHeader && authHeader.split(' ')[1]
     let tokenInDb=token_collection.findOne({'RT':token})
 
-    console.log(tokenInDb);
-
     if (token == null || tokenInDb == null) { return res.sendStatus(401) }
 
     jwt.verify(token, process.env.REFRESH_TOKEN, (err, user) => {
