@@ -1,17 +1,15 @@
 # EventApp
 <p> App for hosting events and inviting people </p>  
 
-## Backend-Todos 
-- Session Identification
+## Backend-Todos
+- Redesign 
 - Certificate Collection
-- Manual Test
 - Images
 - Controllers [User-Event-Invite]
 - Expection Handling
 - Indepth Data Vaildation & Sanitazation
 - Middleweres (IsOwner ...etc )
 - QR Code Genrator
-- Testing (Optional)
 
 
 ## Flutter App

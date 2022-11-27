@@ -20,7 +20,7 @@ app.post('/RT',authJWT_RT,(req,res)=>{
         id: req.logedinUser.id
     }, process.env.ACCESS_TOKEN, { expiresIn: "5m", algorithm: "HS512" })
 
-    res.sendStatus(203).send({
+    res.send({
         AT: "Bearer " + AT
     })
 })

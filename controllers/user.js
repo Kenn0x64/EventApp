@@ -72,10 +72,21 @@ module.exports.login = async (req, res) => {
         id: loginUser._id
     }, process.env.REFRESH_TOKEN, { expiresIn: "2w", algorithm: "HS512" })
 
-    await new token_collection({
-        'userId': loginUser._id,
-        'RT': RT,
-    }).save()
+
+     let islogedIn=await token_collection.findOne({'userId': loginUser._id})
+
+    if (islogedIn!=null) {
+        await token_collection.findByIdAndUpdate(islogedIn._id,{
+            $push:{"RT":RT}
+        })
+    }
+    else{ 
+        await new token_collection({
+            'userId': loginUser._id,
+            'RT': RT,
+        }).save()
+    }
+
 
     res.send(RESPONSE(res.statusMessage,res.statusCode,{
         AT: "Bearer " + AT,

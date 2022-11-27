@@ -36,14 +36,14 @@ const userSchema= new mongoose.Schema({
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'events',
     },
-    recivedInvites:{
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'invites',
-    },
-    pendingInvites:{
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'events',
-    }
+    // recivedInvites:{
+    //     type: [mongoose.Schema.Types.ObjectId],
+    //     ref: 'invites',
+    // },
+    // pendingInvites:{
+    //     type: [mongoose.Schema.Types.ObjectId],
+    //     ref: 'events',
+    // }
 })
 
 module.exports=mongoose.model("users",userSchema);
