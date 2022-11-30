@@ -1,8 +1,7 @@
 # EventApp
 <p> App for hosting events and inviting people </p>  
 
-## Backend-Todos
-- Redesign 
+## Backend-Todos 
 - Certificate Collection
 - Images
 - Controllers [User-Event-Invite]
