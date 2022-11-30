@@ -37,14 +37,6 @@ const eventSchema = new mongoose.Schema({
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'users',
         required: [true, 'Invaild MemberId'],
-    },
-    invitedMembers: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'users'
-    },
-    waitingForInvites: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'users'
     }
 })
 

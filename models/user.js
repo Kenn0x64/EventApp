@@ -1,4 +1,4 @@
-const { number } = require("joi");
+const { number, bool } = require("joi");
 const mongoose = require("mongoose");
 
 const userSchema= new mongoose.Schema({
@@ -36,14 +36,10 @@ const userSchema= new mongoose.Schema({
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'events',
     },
-    // recivedInvites:{
-    //     type: [mongoose.Schema.Types.ObjectId],
-    //     ref: 'invites',
-    // },
-    // pendingInvites:{
-    //     type: [mongoose.Schema.Types.ObjectId],
-    //     ref: 'events',
-    // }
+    admin:{
+        type:Boolean,
+        required:[true,'Error Admin'],
+    }
 })
 
 module.exports=mongoose.model("users",userSchema);
