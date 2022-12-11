@@ -8,6 +8,13 @@ const eventSchema = new mongoose.Schema({
         },
         url:String,
     },
+    eventBackgroundPic:{
+        fileName:{
+            type:String,
+            unique:true,
+        },
+        url:String,
+    },
     title: {
         type: String,
         required: [true, 'Invaild Event Name']

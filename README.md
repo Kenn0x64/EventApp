@@ -2,8 +2,7 @@
 <p> App for hosting events and inviting people </p>  
 
 ## Backend-Todos 
-- Certificate Collection
-- Images
+- Test Image
 - Controllers [User-Event-Certificate]
 - Expection Handling
 - Indepth Data Vaildation & Sanitazation
@@ -22,7 +21,7 @@
 - Event Home
 - Event Createtion
 - View-Edit Event
-- ....etc
+....etc
 
 
 

@@ -15,12 +15,17 @@ module.exports.createUser = async (req, res) => {
     //test
     await user.findOneAndDelete({'email':req.body.userdata.email})
     
-    let newuser = await new user({
-        ...req.body.userdata,
-        password: hashSync(req.body.userdata.password, 12)
-    }).save()
+    //add image 
+    //..code
+
+    console.log(req.eventPic);
     
-    res.send(RESPONSE(res.statusMessage, res.statusCode, "User Created"))
+    // let newuser = await new user({
+    //     ...req.body.userdata,
+    //     password: hashSync(req.body.userdata.password, 12)
+    // }).save()
+    
+    // res.send(RESPONSE(res.statusMessage, res.statusCode, "User Created"))
 }
 
 module.exports.deleteUser = async (req, res) => {
