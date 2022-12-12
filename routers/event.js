@@ -9,11 +9,13 @@ router.route('/').get(authJWT_AT, event.getEvents)
 router.route('/:eventid/owner').get(authJWT_AT, event.getEventOwner)
 
 router.route('/register').post(
-    authJWT_AT,
-    eventImageHandlerPicture.single('eventPic'),
+    // authJWT_AT,
+    // eventImageHandlerPicture.single('eventPic'),
     // eventImageHandlerBackground.single('eventBackgroundPic'),
-    event.createEvent)
+    event.createEvent) 
 
+
+    
 router.route('/update/:evenid').put(
     authJWT_AT,
     eventImageHandlerPicture.single('eventPic'),

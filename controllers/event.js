@@ -7,17 +7,29 @@ const invite = require("../models/invite")
 
 
 module.exports.createEvent = async (req, res) => {
-    let userdata = (await user.find({ '_id': req.body.id }))[0]
+    // let userdata = (await user.find({ '_id': req.body.id }))[0]
 
-    let newEvent = new event({
-        owner: {
-            eventOwnerName: userdata.fullName,
-            ownerId: req.body.id,
-        },
-        ...req.body.eventdata,
-    })
-    newEvent.eventMembers.push(userdata.fullName)
-    await newEvent.save()
+    console.log(req.body);
+    
+
+    // let newEvent = new event({
+    //     eventPic:{
+    //         fileName:req.eventPic,
+    //         url:`http://${process.env.HOST}:${process.env.PORT}/uploads/users/${req.eventPic}`
+    //     },
+    //     eventBackgroundPic:
+    //     {
+    //         fileName:req.eventBackgroundPic,
+    //         url:`http://${process.env.HOST}:${process.env.PORT}/uploads/users/${req.eventBackgroundPic}`
+    //     },
+    //     owner: {
+    //         eventOwnerName: userdata.fullName,
+    //         ownerId: req.body.id,
+    //     },
+    //     ...req.body.eventdata,
+    // })
+    // newEvent.eventMembers.push(userdata.fullName)
+    // await newEvent.save()
 }
 
 

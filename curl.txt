@@ -28,4 +28,8 @@ http://localhost:3000/user/login
     }
 }
 --------------------------------
+Create User
+http://localhost:3000/user/register
+
+--------------------------------
  eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsImlkIjoiNjM1ZWY0ZDg0OWY5NTI2NjVkZTBkOWZmIiwiaWF0IjoxNjY5NTg5MDE0LCJleHAiOjE2NzA3OTg2MTR9.ZxmS2VruwZvJdr37hdkp5sdoXWAzMaZeHnJ2f5U4APwoePbGRNGd7191ShnbLLnkzPKjJGcyVnboktxXvgmuFw

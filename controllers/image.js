@@ -5,13 +5,12 @@ const multer = require("multer")
 const userImageHandler = multer({
     storage: multer.diskStorage({
         destination: (req, file, fun) => {
-            fun(null, 'Images/users')
+            fun(null, 'images/users')
         },
         filename: (req, file, fun) => {
-            console.log(file);
-            let name=Date.now() + path.extname(file.originalname)
-            req.profilePic=name
-            fun(null,name)
+            let name = Date.now() + path.extname(file.originalname)
+            req.profilePic = name
+            fun(null, name)
         }
     })
 })
@@ -19,12 +18,12 @@ const userImageHandler = multer({
 const eventImageHandlerPicture = multer({
     storage: multer.diskStorage({
         destination: (req, file, fun) => {
-            fun(null, 'Images/events/eventImage')
+            fun(null, 'images/events/eventImage')
         },
         filename: (req, file, fun) => {
-            console.log(file);
-            let name=Date.now() + path.extname(file.originalname)
-            req.eventPic=name
+
+            let name = Date.now() + path.extname(file.originalname)
+            req.eventPic = name
             fun(null, name)
         }
     })
@@ -33,20 +32,20 @@ const eventImageHandlerPicture = multer({
 const eventImageHandlerBackground = multer({
     storage: multer.diskStorage({
         destination: (req, file, fun) => {
-            fun(null, 'Images/events/background')
+            fun(null, 'images/events/background')
         },
         filename: (req, file, fun) => {
-            console.log(file);
-            let name=Date.now() + path.extname(file.originalname)
-            req.eventBackgroundPic=name
+
+            let name = Date.now() + path.extname(file.originalname)
+            req.eventBackgroundPic = name
             fun(null, name)
         }
     })
 })
 
 
-module.exports = { 
+module.exports = {
     userImageHandler,
-    eventImageHandlerPicture, 
-    eventImageHandlerBackground 
+    eventImageHandlerPicture,
+    eventImageHandlerBackground
 }

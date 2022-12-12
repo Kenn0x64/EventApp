@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+
+    <form enctype="multipart/form-data" action="http://localhost:3000/event/register" method="POST">
+
+        <!-- eventPic: <input type="file" name="eventPic" /><br>
+        eventBackgroundPic: <input type="file" name="eventBackgroundPic" /><br>
+         -->
+        title: <input type="text" name="title" /><br>
+        description: <input type="text" name="eventdata[description]" /><br>
+        location: <input type="text" name="eventdata[location]" /><br>
+        <!-- startDateTime: <input type="datetime" name="eventdata[startDateTime]" /><br>
+        endDateTime: <input type="datetime" name="eventdata[endDateTime]" /><br>
+         -->
+    
+        <input type="submit"  value="Create" />
+    </form>
+
+
+</body>
+ 
+</html>

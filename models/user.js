@@ -38,8 +38,8 @@ const userSchema= new mongoose.Schema({
     },
     admin:{
         type:Boolean,
-        required:[true,'Error Admin'],
+        default: '0',
     }
 })
-
+ 
 module.exports=mongoose.model("users",userSchema);

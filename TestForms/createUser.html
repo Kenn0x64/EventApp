@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+
+    <form enctype="multipart/form-data" action="http://localhost:3000/user/register" method="POST">
+
+        ProfilePic: <input type="file" name="profilePic" /><br>
+        Fullname: <input type="text" name="userdata[fullName]" /><br>
+        email: <input type="email" name="userdata[email]" /><br>
+        password: <input type="text" name="userdata[password]" /><br>
+        phone: <input type="number" name="userdata[phoneNumber]" /><br>
+        bio: <input type="text" name="userdata[bio]" /><br>
+    
+        <input type="submit"  value="Create" />
+    </form>
+
+
+</body>
+ 
+</html>

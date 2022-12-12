@@ -2,7 +2,7 @@
 <p> App for hosting events and inviting people </p>  
 
 ## Backend-Todos 
-- Test Image
+- Test EventImages
 - Controllers [User-Event-Certificate]
 - Expection Handling
 - Indepth Data Vaildation & Sanitazation

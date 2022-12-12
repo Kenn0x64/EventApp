@@ -16,6 +16,7 @@ app.set('json spaces',10)
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 app.use('/uploads',express.static(path.join(__dirname,'/public')))
+app.use('/uploads',express.static(path.join(__dirname,'/images')))
 app.use(cors())
 
 //Routers
