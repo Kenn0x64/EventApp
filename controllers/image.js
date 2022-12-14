@@ -18,10 +18,10 @@ const userImageHandler = multer({
 const eventImageHandlerPicture = multer({
     storage: multer.diskStorage({
         destination: (req, file, fun) => {
+            console.log(file); 
             fun(null, 'images/events/eventImage')
         },
         filename: (req, file, fun) => {
-
             let name = Date.now() + path.extname(file.originalname)
             req.eventPic = name
             fun(null, name)
@@ -31,11 +31,10 @@ const eventImageHandlerPicture = multer({
 
 const eventImageHandlerBackground = multer({
     storage: multer.diskStorage({
-        destination: (req, file, fun) => {
+        destination: (req, file, fun) =>  {
             fun(null, 'images/events/background')
         },
         filename: (req, file, fun) => {
-
             let name = Date.now() + path.extname(file.originalname)
             req.eventBackgroundPic = name
             fun(null, name)

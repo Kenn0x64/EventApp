@@ -10,8 +10,8 @@ router.route('/:eventid/owner').get(authJWT_AT, event.getEventOwner)
 
 router.route('/register').post(
     // authJWT_AT,
-    // eventImageHandlerPicture.single('eventPic'),
-    // eventImageHandlerBackground.single('eventBackgroundPic'),
+    eventImageHandlerPicture.single('eventPic'),
+    eventImageHandlerBackground.single('eventBackgroundPic'),
     event.createEvent) 
 
 

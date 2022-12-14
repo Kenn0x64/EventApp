@@ -1,7 +1,6 @@
 require("express")
 const event = require("../models/event")
 const user = require("../models/user")
-const invite = require("../models/invite")
 
 
 
@@ -10,6 +9,8 @@ module.exports.createEvent = async (req, res) => {
     // let userdata = (await user.find({ '_id': req.body.id }))[0]
 
     console.log(req.body);
+
+    res.send("A")
     
 
     // let newEvent = new event({
