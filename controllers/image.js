@@ -1,7 +1,6 @@
 const path = require("path")
 const multer = require("multer")
 
-
 const userImageHandler = multer({
     storage: multer.diskStorage({
         destination: (req, file, fun) => {
@@ -15,36 +14,67 @@ const userImageHandler = multer({
     })
 })
 
-const eventImageHandlerPicture = multer({
+const eventImageHandler = multer({
     storage: multer.diskStorage({
         destination: (req, file, fun) => {
-            console.log(file); 
-            fun(null, 'images/events/eventImage')
+            if (file.fieldname == 'eventPic') {
+                fun(null, 'images/events/event_images')
+            }
+            else if (file.fieldname == 'eventBackgroundPic') {
+                fun(null, 'images/events/background_images')
+            }
         },
         filename: (req, file, fun) => {
             let name = Date.now() + path.extname(file.originalname)
-            req.eventPic = name
+            if (file.fieldname == 'eventPic') {
+                req.eventPic = name
+            }
+            else if (file.fieldname == 'eventBackgroundPic') {
+                req.eventBackgroundPic = name
+            }
             fun(null, name)
         }
     })
 })
 
-const eventImageHandlerBackground = multer({
-    storage: multer.diskStorage({
-        destination: (req, file, fun) =>  {
-            fun(null, 'images/events/background')
-        },
-        filename: (req, file, fun) => {
-            let name = Date.now() + path.extname(file.originalname)
-            req.eventBackgroundPic = name
-            fun(null, name)
-        }
-    })
-})
+
+async function sendUserImages(req, res) {
+
+    images = path.join(__dirname, '../images')
+    image = req.params.imageName
+    
+    //HOST/uploads/users/ImageName
+    res.sendFile(`${images}/users/${image}`)
+}
+
+
+
+async function sendEventImages(req, res) {
+
+    images = path.join(__dirname, '../images/events')
+    image = req.params.imageName
+    EorB = (req.params.EorB).toLowerCase()
+   
+
+    if (EorB == 'eventimage') {
+        //HOST/uploads/events/eventImage/ImageName
+        res.sendFile(`${images}/event_images/${image}`)
+    }
+    else if (EorB == 'backgroundimage') {
+        //HOST/uploads/events/backgroundImage/ImageName
+        res.sendFile(`${images}/background_images/${image}`)
+    }
+    else{
+        res.send("Hmm Something Is Not Right?")
+    }
+}
+
+
 
 
 module.exports = {
+    sendUserImages,
+    sendEventImages,
     userImageHandler,
-    eventImageHandlerPicture,
-    eventImageHandlerBackground
+    eventImageHandler,
 }

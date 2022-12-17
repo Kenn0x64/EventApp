@@ -13,16 +13,16 @@ require('../utils/delete_from_arr')
 
 module.exports.createUser = async (req, res) => {
     // test
-    await user.findOneAndDelete({'email':req.body.userdata.email})
+    // await user.findOneAndDelete({'email':req.body.userdata.email})
 
-    await new user({
-        ...req.body.userdata,
-        profilePic:{
-            fileName:req.profilePic,
-            url:`http://${process.env.HOST}:${process.env.PORT}/uploads/users/${req.profilePic}`
-        },
-        password: hashSync(req.body.userdata.password, 12)
-    }).save()
+    // await new user({
+    //     ...req.body.userdata,
+    //     profilePic:{
+    //         fileName:req.profilePic,
+    //         url:`http://${process.env.HOST}:${process.env.PORT}/uploads/users/${req.profilePic}`
+    //     },
+    //     password: hashSync(req.body.userdata.password, 12)
+    // }).save()
     
     res.send(RESPONSE(res.statusMessage, res.statusCode, "User Created"))
 }

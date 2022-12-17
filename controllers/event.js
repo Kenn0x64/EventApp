@@ -8,9 +8,9 @@ const user = require("../models/user")
 module.exports.createEvent = async (req, res) => {
     // let userdata = (await user.find({ '_id': req.body.id }))[0]
 
-    console.log(req.body);
+   
 
-    res.send("A")
+    res.send("Done")
     
 
     // let newEvent = new event({
