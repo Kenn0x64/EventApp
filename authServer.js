@@ -3,8 +3,7 @@ const cors=require("cors");
 const database=require("./utils/database")
 const app = express();
 const jwt = require("jsonwebtoken")
-const {authJWT_RT,authJWT_AT}=require("./utils/middlewares")
-
+const {authJWT_RT,authJWT_AT}=require("./controllers/auth")
 
 //Settings
 app.set('json spaces',10)

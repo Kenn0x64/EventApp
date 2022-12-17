@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const image = require('../controllers/image')
-const { authJWT_RT, authJWT_AT } = require("../utils/middlewares")
+const { authJWT_RT, authJWT_AT } = require("../controllers/auth")
 
 
 router.route('/users/:imageName').get(

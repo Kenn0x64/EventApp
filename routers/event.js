@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const event = require('../controllers/event')
-const { authJWT_RT, authJWT_AT } = require("../utils/middlewares")
+const { authJWT_RT, authJWT_AT } = require("../controllers/auth")
 const { eventImageHandler } = require("../controllers/image")
 
 

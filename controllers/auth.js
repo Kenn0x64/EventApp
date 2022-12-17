@@ -26,7 +26,7 @@ function authJWT_AT(req, res, next) {
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
         if (err) { res.sendStatus(403) }
         req.logedinUser = user
-        next()
+        next()  
     })
 }
 

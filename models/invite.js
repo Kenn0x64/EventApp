@@ -24,5 +24,3 @@ const inviteSchma=new mongoose.Schema({
     }
 })
 
-
-module.exports=mongoose.model('invites',inviteSchma)

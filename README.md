@@ -6,7 +6,6 @@
 - Expection Handling
 - Indepth Data Vaildation & Sanitazation
 - Middleweres (IsOwner ...etc )
-- QR Code Genrator
 
 
 ## Flutter App
@@ -21,6 +20,9 @@
 - Event Createtion
 - View-Edit Event
 ....etc
+### Todos
+- QR Code Genrator
+
 
 
 

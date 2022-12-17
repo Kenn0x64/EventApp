@@ -18,7 +18,7 @@ const userSchema= new mongoose.Schema({
         required:[true,'Invaild Email'],
         unique:true,
         lowercase:true,
-    },
+    }, 
     phoneNumber:{
         type:Number,
         unique:true,
@@ -32,13 +32,13 @@ const userSchema= new mongoose.Schema({
         type:String,
         required:[true,'Invaild Profile Bio'],
     },
-    joinedEvents:{
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'events',
-    },
     admin:{
         type:Boolean,
         default: '0',
+    },
+    joinedEvents:{
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'events',
     }
 })
  

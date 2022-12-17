@@ -7,50 +7,56 @@ const { hashSync, compareSync } = require('bcrypt')
 const jwt = require("jsonwebtoken")
 const event = require("../models/event")
 const eventCons = require('../controllers/event')
+const { removeUserFormEvents, removeEventFormUsers } = require("../utils/delete_from_arr")
 require('../utils/delete_from_arr')
 
 
 
 module.exports.createUser = async (req, res) => {
-    // test
-    // await user.findOneAndDelete({'email':req.body.userdata.email})
-
-    // await new user({
-    //     ...req.body.userdata,
-    //     profilePic:{
-    //         fileName:req.profilePic,
-    //         url:`http://${process.env.HOST}:${process.env.PORT}/uploads/users/${req.profilePic}`
-    //     },
-    //     password: hashSync(req.body.userdata.password, 12)
-    // }).save()
-    
+    await new user({
+        ...req.body.userdata,
+        profilePic:{
+            fileName:req.profilePic,
+            url:`http://${process.env.HOST}:${process.env.PORT}/uploads/users/${req.profilePic}`
+        },
+        password: hashSync(req.body.userdata.password, 12)
+    }).save()
+     
     res.send(RESPONSE(res.statusMessage, res.statusCode, "User Created"))
 }
 
 module.exports.deleteUser = async (req, res) => {
-    //delete user from all events -> done
-    //delete any events that current user owns
-    //delete invites
-    //delete all images in uploads
-
     let userid = req.logedinUser.id
-    removeUserFormEvents(userid)
-    await event.findOne(userid)
-    
-    await invite.findByIdAndDelete(userid)
-    await user.findByIdAndDelete(userid)
 
+    //delete user from all events 
+    removeUserFormEvents(userid)
+
+    //delete any event user made
+    // deleteUserEvents_RemoveFromUsers()
+
+    //delete all user images
+    // deleteUserImages()
+
+    await user.findByIdAndDelete(userid)
     res.send(RESPONSE(res.statusMessage, res.statusCode, "User Deleted"))
 }
 
-module.exports.updateUser = async (req, res) => {
-    await user.findByIdAndUpdate(req.body.id, req.body.userdata)
-    // res.redirect()
+module.exports.updateUser = async (req, res) => { 
+    await user.findByIdAndUpdate(req.logedinUser.id, {
+       ... req.body.userdata,
+       profilePic:{
+        fileName:req.profilePic,
+        url:`http://${process.env.HOST}:${process.env.PORT}/uploads/users/${req.profilePic}`
+    },
+    password: hashSync(req.body.userdata.password, 12)
+    }) 
+
+    res.send(RESPONSE(res.statusMessage, res.statusCode, "User Updated"))
 }
 
 
 module.exports.getUser = async (req, res) => {
-    res.send(await user.find({ '_id': req.body.id }))
+    res.send(await user.find({ '_id': req.logedinUser.id }))
 }
 
 module.exports.getUsers = async (req, res) => {
@@ -58,6 +64,8 @@ module.exports.getUsers = async (req, res) => {
 }
 
 module.exports.login = async (req, res) => {
+
+
     let loginUser = await user.findOne({ 'email': req.body.userdata.email })
 
     if (!loginUser) {
@@ -65,10 +73,10 @@ module.exports.login = async (req, res) => {
     }
     if (!compareSync(req.body.userdata.password, loginUser.password)) {
         return res.send("Incorrect Email or Password ")
-    }
+    } 
 
     let AT = jwt.sign({
-        id: loginUser._id
+        id: loginUser._id 
     }, process.env.ACCESS_TOKEN, { expiresIn: "5m", algorithm: "HS512" })
 
     let RT = jwt.sign({
@@ -94,7 +102,9 @@ module.exports.login = async (req, res) => {
 
     res.send(RESPONSE(res.statusMessage,res.statusCode,{
         AT: "Bearer " + AT,
-        RT: "Bearer " + RT
+        AT:  AT,
+        RT: "Bearer " + RT,
+        RT:  RT
     }))
 }
 
