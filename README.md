@@ -2,9 +2,9 @@
 <p> App for hosting events and inviting people </p>  
 
 ## Backend-Todos 
-- Controllers [DeleteUser-Event-Certificate]
-- Indepth Data Vaildation & Sanitazation & Expection Handling
-- Middleweres (IsOwner ...etc )
+- Controllers [DeleteUser-Events-Certificate]
+- Authorization 
+- Vaildation & Sanitazation & Expections 
 
 
 ## Flutter App

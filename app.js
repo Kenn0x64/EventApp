@@ -9,8 +9,6 @@ const eventRouter=require("./routers/event")
 const imageRouter=require("./routers/image")
 
 
-
-
 //Settings
 app.set('json spaces',10)
 //middleweres
@@ -28,10 +26,6 @@ app.use('/uploads',imageRouter)
 
 app.get('/test',(req,res)=>{
     res.send("Test")
-
-
-   
-
 })
 
 const PORT=process.env.PORT || 4000 
