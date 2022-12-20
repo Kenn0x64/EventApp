@@ -2,9 +2,8 @@
 <p> App for hosting events and inviting people </p>  
 
 ## Backend-Todos 
-- Controllers [User-Event-Certificate]
-- Expection Handling
-- Indepth Data Vaildation & Sanitazation
+- Controllers [DeleteUser-Event-Certificate]
+- Indepth Data Vaildation & Sanitazation & Expection Handling
 - Middleweres (IsOwner ...etc )
 
 

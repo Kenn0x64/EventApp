@@ -24,13 +24,13 @@ module.exports.createUser = async (req, res) => {
      
     res.send(RESPONSE(res.statusMessage, res.statusCode, "User Created"))
 }
-
+  
 module.exports.deleteUser = async (req, res) => {
-    let userid = req.logedinUser.id
+    let userid = req.logedinUser.id  
 
     //delete user from all events 
     removeUserFormEvents(userid)
-
+ 
     //delete any event user made
     // deleteUserEvents_RemoveFromUsers()
 
@@ -50,21 +50,20 @@ module.exports.updateUser = async (req, res) => {
     },
     password: hashSync(req.body.userdata.password, 12)
     }) 
-
     res.send(RESPONSE(res.statusMessage, res.statusCode, "User Updated"))
 }
 
 
 module.exports.getUser = async (req, res) => {
-    res.send(await user.find({ '_id': req.logedinUser.id }))
+    res.send(await user.findOne({ '_id': req.params.id }))
 }
 
-module.exports.getUsers = async (req, res) => {
-    res.send(await user.find({}))
+module.exports.getLogedInUser = async (req, res) => {
+    res.send(await user.findOne({ '_id': req.logedinUser.id }))
 }
+
 
 module.exports.login = async (req, res) => {
-
 
     let loginUser = await user.findOne({ 'email': req.body.userdata.email })
 
@@ -99,14 +98,12 @@ module.exports.login = async (req, res) => {
         }).save()
     }
 
-
     res.send(RESPONSE(res.statusMessage,res.statusCode,{
         AT: "Bearer " + AT,
-        AT:  AT,
         RT: "Bearer " + RT,
-        RT:  RT
     }))
 }
+
 
 module.exports.logout = async (req, res) => {
     let anything=await token_collection.deleteMany({ 'userId': req.logedinUser.id })    

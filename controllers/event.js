@@ -70,3 +70,7 @@ module.exports.getEventOwner = async (req, res) => {
      let {profilePic,fullName,bio,joinedEvents}= await user.findOne({'_id':currentevent.ownerId})
      res.send(profilePic,fullName,bio,joinedEvents)
 }
+
+module.exports.getJoinedUsers = async (req, res) => {
+    res.send(await user.find({eventId:req.params.eventId}))
+}

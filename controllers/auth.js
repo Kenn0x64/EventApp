@@ -2,13 +2,13 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const token_collection = require("../models/token")
 
-function authJWT_RT(req, res, next) {
+async function authJWT_RT(req, res, next) {
     let authHeader = req.headers['authorization']
     let token = authHeader && authHeader.split(' ')[1]
-    let tokenInDb=token_collection.findOne({'RT':token})
+    let tokenInDb= await token_collection.findOne({'RT':token})
 
     if (token == null || tokenInDb == null) { return res.sendStatus(401) }
-
+    
     jwt.verify(token, process.env.REFRESH_TOKEN, (err, user) => {
         if (err) { res.sendStatus(403) }
         req.logedinUser = user
