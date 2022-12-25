@@ -18,7 +18,7 @@ router.route('/register').post(
 
 
 
-router.route('/update/:evenid').put(
+router.route('/update/:evenid').patch(
     authJWT_AT,
     eventImageHandler.fields([
         { name: 'eventPic' },

@@ -1,18 +1,14 @@
 require("express")
 const event = require("../models/event")
+const org = require("../models/org")
 const user = require("../models/user")
-
-
 
 
 module.exports.createEvent = async (req, res) => {
     // let userdata = (await user.find({ '_id': req.body.id }))[0]
 
-   
-
     res.send("Done")
     
-
     // let newEvent = new event({
     //     eventPic:{
     //         fileName:req.eventPic,
@@ -66,10 +62,25 @@ module.exports.getEvents = async (req, res) => {
 
 module.exports.getEventOwner = async (req, res) => {
      currentevent= await event.findOne({'_id':req.params.eventId})
-     let {profilePic,fullName,bio,joinedEvents}= await user.findOne({'_id':currentevent.ownerId})
+     let {profilePic,fullName,bio,joinedEvents}= await org.findOne({'_id':currentevent.orgId})
      res.send(profilePic,fullName,bio,joinedEvents)
 }
 
-module.exports.getJoinedUsers = async (req, res) => {
-    res.send(await user.find({eventId:req.params.eventId}))
+module.exports.getEventMembers = async (req, res) => {
+    res.send(await event.find({eventId:req.params.eventId}))
 }
+
+
+module.exports.recordCheckin = async (req, res) => {
+    // HOST/event/checkin/:eventid?userid
+}
+
+module.exports.recordCheckout = async (req, res) => {
+    // HOST/event/checkout/:eventid?userid
+}
+
+module.exports.genCerts = async (req, res) => {
+    // Generate Certificates Of All Users
+    // HOST/event/certificate/:eventid
+}
+

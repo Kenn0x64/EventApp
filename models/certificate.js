@@ -9,6 +9,20 @@ const certificateSchema= new mongoose.Schema({
         type:Date,
         required:[true,'Invaild Checkout Time'],
     },
+    cert:{
+        fileName: {
+            type: String,
+            unique: true,
+        },
+        url: String,
+    },
+    sig:{
+        fileName: {
+            type: String,
+            unique: true,
+        },
+        url: String,
+    },
     userId:{
         type:mongoose.Schema.Types.ObjectId,
         unique:true,
@@ -24,7 +38,6 @@ const certificateSchema= new mongoose.Schema({
         unique:true,
         ref:'orgs'
     },
-
 })
 
 module.exports=mongoose.model("certificates",certificateSchema);

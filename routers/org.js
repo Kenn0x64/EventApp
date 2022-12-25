@@ -17,7 +17,7 @@ router.route('/logout').post(authJWT_RT, org.logout)
 
 
 
-router.route('/update/:orgid').put(
+router.route('/update/:orgid').patch(
     authJWT_AT,
     orgImageHandler.fields([
         { name: 'orgPic' },

@@ -26,31 +26,31 @@ const userSchema= new mongoose.Schema({
     phoneNumber:{
         type:Number,
         unique:true,
-        required:[true,'Invaild Phone Number']
+        // required:[true,'Invaild Phone Number']
     },
     date_of_birth:{
         type:Date,
-        required:[true,'Invaild Age'],
+        // required:[true,'Invaild Age'],
     },
     university:{
         type:String,
-        required:[true,'Invaild University'],
+        // required:[true,'Invaild University'],
     },
     faculty:{
         type:String,
-        required:[true,'Invaild Faculty'],
+        // required:[true,'Invaild Faculty'],
     },
     department:{
         type:String,
-        required:[true,'Invaild Faculty'],
+        // required:[true,'Invaild Faculty'],
     },
     scientific_title:{
         type:String,
-        required:[true,'Invaild Scientific Title'],
+        // required:[true,'Invaild Scientific Title'],
     },
     bio:{
         type:String,
-        required:[true,'Invaild Profile Bio'],
+        // required:[true,'Invaild Profile Bio'],
     },
     joinedEvents:{
         type: [mongoose.Schema.Types.ObjectId],

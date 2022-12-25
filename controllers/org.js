@@ -4,12 +4,7 @@ const token_collection = require("../models/token")
 const RESPONSE = require("../utils/express_api_res")
 const { hashSync, compareSync } = require('bcrypt')
 const jwt = require("jsonwebtoken")
-const event = require("../models/event")
-const eventCons = require('./event')
-const { removeUserFormEvents, removeEventFormUsers } = require("../utils/delete_from_arr")
 require('../utils/delete_from_arr')
-
-
 
 module.exports.createOrg = async (req, res) => {
     await new org({
@@ -46,24 +41,29 @@ module.exports.deleteOrg = async (req, res) => {
 }
 
 module.exports.updateOrg = async (req, res) => { 
-    // await Org.findByIdAndUpdate(req.logedinOrg.id, {
-    //    ... req.body.Orgdata,
-    //    profilePic:{
-    //     fileName:req.profilePic,
-    //     url:`http://${process.env.HOST}:${process.env.PORT}/uploads/Orgs/${req.profilePic}`
-    // },
-    // password: hashSync(req.body.Orgdata.password, 12)
-    // }) 
-    // res.send(RESPONSE(res.statusMessage, res.statusCode, "Org Updated"))
+    await Org.findByIdAndUpdate(req.logedinOrg.id, {
+       ... req.body.Orgdata,
+       orgPic:{
+        fileName:req.orgPic,
+        url:`http://${process.env.HOST}:${process.env.PORT}/uploads/org/orgimage/${req.orgPic}`
+    },
+    orgBackgroundPic:
+    {
+        fileName:req.orgBackgroundPic,
+        url:`http://${process.env.HOST}:${process.env.PORT}/uploads/org/backgroundImage/${req.orgBackgroundPic}`
+    },
+    password: hashSync(req.body.orgdata.password, 12)
+    }) 
+    res.send(RESPONSE(res.statusMessage, res.statusCode, "Org Updated"))
 }
 
 
 module.exports.getOrg = async (req, res) => {
-    // res.send(await user.findOne({ '_id': req.params.id }))
+    res.send(await org.findOne({ '_id': req.params.id }))
 }
 
 module.exports.getLogedInOrg = async (req, res) => {
-    // res.send(await user.findOne({ '_id': req.logedinUser.id }))
+    res.send(await org.findOne({ '_id': req.logedinOrg.id }))
 }
 
 
@@ -113,3 +113,10 @@ module.exports.logout = async (req, res) => {
     let anything=await token_collection.deleteMany({ 'orgId': req.logedinOrg.id })    
     res.send(RESPONSE(res.statusMessage, res.statusCode,anything.deletedCount<=0?"No Sessions To LogOut":"Loged Out"))
 }
+
+module.exports.removeUserFormEvent = async (req, res) => {
+    // Get UserID From Query String
+    // Get EventID From Params
+    // Remove User From Event
+}
+

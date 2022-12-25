@@ -9,7 +9,7 @@ router.route('/login').post(user.login)
 
 router.route('/logout').post(authJWT_RT,user.logout)
 
-router.route('/update').put(authJWT_AT,userImageHandler.single('profilePic'),user.updateUser)
+router.route('/update').patch(authJWT_AT,userImageHandler.single('profilePic'),user.updateUser)
 router.route('/delete').delete(authJWT_AT,user.deleteUser)
 router.route('/profile').get(authJWT_AT,user.getLogedInUser)
 router.route('/profile/:id').get(authJWT_AT,user.getUser)
@@ -17,3 +17,4 @@ router.route('/profile/:id').get(authJWT_AT,user.getUser)
 
 module.exports=router
 
+  

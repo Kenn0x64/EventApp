@@ -109,3 +109,19 @@ module.exports.logout = async (req, res) => {
     let anything=await token_collection.deleteMany({ 'userId': req.logedinUser.id })    
     res.send(RESPONSE(res.statusMessage, res.statusCode,anything.deletedCount<=0?"No Sessions To LogOut":"Loged Out"))
 }
+
+module.exports.joinEvent = async (req, res) => {
+    // Get id of event from req
+    // Add LoggedIn User To Event
+    
+}
+
+module.exports.quitEvent = async (req, res) => {
+    // Get Id of event from req
+    // Remove LogedIn User From Event
+}
+
+module.exports.getCertificate = async (req, res) => {   
+}
+
+
