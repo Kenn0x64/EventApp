@@ -18,8 +18,7 @@ module.exports.createEvent = async (req, res) => {
     //         fileName:req.eventPic,
     //         url:`http://${process.env.HOST}:${process.env.PORT}/uploads/users/${req.eventPic}`
     //     },
-    //     eventBackgroundPic:
-    //     {
+    //     eventBackgroundPic:{
     //         fileName:req.eventBackgroundPic,
     //         url:`http://${process.env.HOST}:${process.env.PORT}/uploads/users/${req.eventBackgroundPic}`
     //     },

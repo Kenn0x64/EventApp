@@ -8,9 +8,13 @@ router.route('/users/:imageName').get(
     // authJWT_AT,
     image.sendUserImages)
 
-router.route('/events/:EorB/:imageName').get(
+router.route('/events/:imageName').get(
     // authJWT_AT,
     image.sendEventImages)
+
+router.route('/org/:o_bg/:imageName').get(
+    // authJWT_AT,
+    image.sendOrgImages)
 
 
 module.exports = router

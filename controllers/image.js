@@ -14,24 +14,40 @@ const userImageHandler = multer({
     })
 })
 
-const eventImageHandler = multer({
+
+const orgImageHandler = multer({
     storage: multer.diskStorage({
         destination: (req, file, fun) => {
-            if (file.fieldname == 'eventPic') {
-                fun(null, 'images/events/event_images')
+            if (file.fieldname == 'orgPic') {
+                fun(null, 'images/orgs/org_images')
             }
-            else if (file.fieldname == 'eventBackgroundPic') {
-                fun(null, 'images/events/background_images')
+            else if (file.fieldname == 'orgBackgroundPic') {
+                fun(null, 'images/orgs/background_images')
             }
         },
         filename: (req, file, fun) => {
             let name = Date.now() + path.extname(file.originalname)
-            if (file.fieldname == 'eventPic') {
+            if (file.fieldname == 'orgPic') {
+                req.orgPic = name
+            }
+            else if (file.fieldname == 'orgBackgroundPic') {
+                req.orgBackgroundPic = name
+            }
+            fun(null, name)
+        }
+    })
+})
+
+
+
+const eventImageHandler = multer({
+    storage: multer.diskStorage({
+        destination: (req, file, fun) => {
+                fun(null, 'images/events')
+        },
+        filename: (req, file, fun) => {
+            let name = Date.now() + path.extname(file.originalname)
                 req.eventPic = name
-            }
-            else if (file.fieldname == 'eventBackgroundPic') {
-                req.eventBackgroundPic = name
-            }
             fun(null, name)
         }
     })
@@ -49,19 +65,18 @@ async function sendUserImages(req, res) {
 
 
 
-async function sendEventImages(req, res) {
-
-    images = path.join(__dirname, '../images/events')
+async function sendOrgImages(req, res) {
+    
+    images = path.join(__dirname, '../images/orgs')
     image = req.params.imageName
-    EorB = (req.params.EorB).toLowerCase()
+    o_bg= (req.params.o_bg).toLowerCase()
    
-
-    if (EorB == 'eventimage') {
-        //HOST/uploads/events/eventImage/ImageName
-        res.sendFile(`${images}/event_images/${image}`)
+    if (o_bg == 'orgimage') {
+        //HOST/uploads/orgs/orgImage/ImageName
+        res.sendFile(`${images}/org_images/${image}`)
     }
-    else if (EorB == 'backgroundimage') {
-        //HOST/uploads/events/backgroundImage/ImageName
+    else if (o_bg == 'backgroundimage') {
+        //HOST/uploads/org/backgroundImage/ImageName
         res.sendFile(`${images}/background_images/${image}`)
     }
     else{
@@ -70,11 +85,23 @@ async function sendEventImages(req, res) {
 }
 
 
+async function sendEventImages(req, res) {
+
+    images = path.join(__dirname, '../images')
+    image = req.params.imageName
+    
+    //HOST/uploads/users/ImageName
+    res.sendFile(`${images}/events/${image}`)
+}
+
+
 
 
 module.exports = {
     sendUserImages,
+    sendOrgImages,
     sendEventImages,
+    orgImageHandler,
     userImageHandler,
     eventImageHandler,
 }

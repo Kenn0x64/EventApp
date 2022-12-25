@@ -1,15 +1,22 @@
 const { number, bool } = require("joi");
 const mongoose = require("mongoose");
 
-const userSchema= new mongoose.Schema({
-    profilePic:{
+const orgSchema= new mongoose.Schema({
+    orgPic:{
         fileName:{
             type:String,
             unique:true,
         },
         url:String,
     },
-    fullName:{
+    orgBackgroundPic:{
+        fileName:{
+            type:String,
+            unique:true,
+        },
+        url:String,
+    },
+    orgName:{
         type:String,
         required:[true,' Invaild FullName']
     },
@@ -28,34 +35,22 @@ const userSchema= new mongoose.Schema({
         unique:true,
         required:[true,'Invaild Phone Number']
     },
-    date_of_birth:{
-        type:Date,
-        required:[true,'Invaild Age'],
-    },
-    university:{
-        type:String,
-        required:[true,'Invaild University'],
-    },
-    faculty:{
-        type:String,
-        required:[true,'Invaild Faculty'],
-    },
-    department:{
-        type:String,
-        required:[true,'Invaild Faculty'],
-    },
-    scientific_title:{
-        type:String,
-        required:[true,'Invaild Scientific Title'],
-    },
     bio:{
         type:String,
         required:[true,'Invaild Profile Bio'],
     },
-    joinedEvents:{
+    org_type:{
+        type:String,
+        required:[true,'Invaild Org Type'],
+    },
+    location:{
+        type:String,
+        required:[true,'Invaild Location'],
+    },
+    orgEvents:{
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'events',
     }
 })
  
-module.exports=mongoose.model("users",userSchema);
+module.exports=mongoose.model("orgs",orgSchema);

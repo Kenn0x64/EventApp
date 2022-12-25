@@ -19,6 +19,12 @@ const certificateSchema= new mongoose.Schema({
         unique:true,
         ref:'events'
     },
+    orgId:{
+        type:mongoose.Schema.Types.ObjectId,
+        unique:true,
+        ref:'orgs'
+    },
+
 })
 
 module.exports=mongoose.model("certificates",certificateSchema);

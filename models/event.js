@@ -1,19 +1,16 @@
 const mongoose = require("mongoose");
 
 const eventSchema = new mongoose.Schema({
-    eventPic:{
-        fileName:{
-            type:String,
-            unique:true,
+    eventBackgroundPic: {
+        fileName: {
+            type: String,
+            unique: true,
         },
-        url:String,
+        url: String,
     },
-    eventBackgroundPic:{
-        fileName:{
-            type:String,
-            unique:true,
-        },
-        url:String,
+    sets: {
+        type: Number,
+        required: [true, 'Invaild Sets']
     },
     title: {
         type: String,
@@ -35,16 +32,16 @@ const eventSchema = new mongoose.Schema({
         type: Date,
         required: [true, "Invaild End Date&Time"]
     },
-    ownerId: {
+    orgId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
-        required: [true, 'Invaild OwnerId'],
+        ref: 'orgs',
+        required: [true, 'Invaild OrgId'],
     },
-    eventMembers:{
+    eventMembers: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'users',
         required: [true, 'Invaild MemberId'],
-    }
+    },
 })
 
 module.exports = mongoose.model("events", eventSchema);

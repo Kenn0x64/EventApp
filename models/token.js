@@ -4,7 +4,12 @@ const tokenSchema= new mongoose.Schema({
     userId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'users',
-        required:[true,'Invaild userID'],
+        default:null
+    },
+    orgId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'orgs',
+        default:null
     },
     RT:{
         type:[String],
@@ -12,4 +17,4 @@ const tokenSchema= new mongoose.Schema({
     }
 })
 
-module.exports=mongoose.model("UTs",tokenSchema);
+module.exports=mongoose.model("TSchema",tokenSchema);

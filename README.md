@@ -1,8 +1,8 @@
 # EventApp
 <p> App for hosting events and inviting people </p>  
 
-## Backend-Todos 
-- Controllers [DeleteUser-Events-Certificate]
+## Backend-Todos  
+- Controllers [Orgs-Events-Certificate]
 - Authorization 
 - Vaildation & Sanitazation & Expections 
 
