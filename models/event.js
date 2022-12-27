@@ -26,10 +26,12 @@ const eventSchema = new mongoose.Schema({
     },
     startDateTime: {
         type: Date,
+        default:Date.now,
         required: [true, "Invaild Start Date&Time"]
     },
     endDateTime: {
         type: Date,
+        default:Date.now,
         required: [true, "Invaild End Date&Time"]
     },
     orgId: {

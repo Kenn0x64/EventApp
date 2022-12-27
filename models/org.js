@@ -37,6 +37,7 @@ const orgSchema= new mongoose.Schema({
     },
     bio:{
         type:String,
+        default:"None",
         required:[true,'Invaild Profile Bio'],
     },
     org_type:{
@@ -45,7 +46,7 @@ const orgSchema= new mongoose.Schema({
     },
     location:{
         type:String,
-        required:[true,'Invaild Location'],
+        default:"None"
     },
     orgEvents:{
         type: [mongoose.Schema.Types.ObjectId],

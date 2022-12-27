@@ -1,6 +1,6 @@
 const express = require("express")()
 const user = require("../models/certificate")
-const RESPONSE = require("../utils/express_api_res")
+const RESPONSE = require("../utils/shared_funs")
 require('../utils/delete_from_arr')
 
 

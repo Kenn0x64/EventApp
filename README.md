@@ -2,7 +2,7 @@
 <p> App for hosting events and inviting people </p>  
 
 ## Backend-Todos 
-- Controllers [Orgs-Events-Certificate-CertificateFiles]
+- Controllers [Events-Certificate-CertificateFiles]
 - Authorization 
 - Vaildation & Sanitazation & Expections 
 

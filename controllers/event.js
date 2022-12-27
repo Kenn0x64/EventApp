@@ -41,6 +41,9 @@ module.exports.deleteEvent = async (req, res) => {
         }
     }
 
+    //remove event from all users
+    //..
+    
     await invite.findByIdAndDelete(req.params.eventId)
     await event.findByIdAndDelete(req.params.eventId)
     res.redirect(`/`)
