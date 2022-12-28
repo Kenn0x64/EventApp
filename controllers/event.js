@@ -1,57 +1,48 @@
-require("express")
 const event = require("../models/event")
 const org = require("../models/org")
-const user = require("../models/user")
-
+const path = require("path")
+const { deleteImages } = require('../utils/shared_funs')
+const { RESPONSE } = require("../utils/shared_funs")
+require("express")
 
 module.exports.createEvent = async (req, res) => {
-    // let userdata = (await user.find({ '_id': req.body.id }))[0]
-
-    res.send("Done")
-    
-    // let newEvent = new event({
-    //     eventPic:{
-    //         fileName:req.eventPic,
-    //         url:`http://${process.env.HOST}:${process.env.PORT}/uploads/users/${req.eventPic}`
-    //     },
-    //     eventBackgroundPic:{
-    //         fileName:req.eventBackgroundPic,
-    //         url:`http://${process.env.HOST}:${process.env.PORT}/uploads/users/${req.eventBackgroundPic}`
-    //     },
-    //     owner: {
-    //         eventOwnerName: userdata.fullName,
-    //         ownerId: req.body.id,
-    //     },
-    //     ...req.body.eventdata,
-    // })
-    // newEvent.eventMembers.push(userdata.fullName)
-    // await newEvent.save()
+    if (!req.logedinOrg) {
+        res.send("No Org")
+    }
+    new event({
+        eventBackgroundPic: {
+            fileName: req.eventPic,
+            url: `http://${process.env.HOST}:${process.env.PORT}/uploads/events/${req.eventPic}`
+        },
+        orgId: req.logedinOrg.id,
+        ...req.body.eventdata,
+    }).save()
+    res.send(RESPONSE(res.statusMessage, res.statusCode, "Event Created"))
 }
-
+module.exports.updateEvent = async (req, res) => {
+    let eventx = await event.findByIdAndUpdate(req.params.eventId,
+        {
+            eventBackgroundPic: {
+                fileName: req.eventPic,
+                url: `http://${process.env.HOST}:${process.env.PORT}/uploads/events/${req.eventPic}`
+            },
+            orgId: req.logedinOrg.id,
+            ...req.body.eventdata,
+        })
+    deleteImages([
+        path.join(`${__dirname}/..`, `/images/events/${eventx.eventBackgroundPic.fileName}`)
+    ])
+    res.send(RESPONSE(res.statusMessage, res.statusCode, "Event Updated"))
+}
 
 module.exports.deleteEvent = async (req, res) => {
-    let users = await user.find({})
-
-    for (let index = 0; index < users.length; index++) {
-        joinedevents = users[index].joinedEvents
-        for (let index = 0; index < joinedevents.length; index++) {
-            if (joinedevents[index] === req.params.eventId) {
-                joinedevents.pop(req.params.eventId)
-            }
-        }
-    }
-
-    //remove event from all users
-    //..
-    
-    await invite.findByIdAndDelete(req.params.eventId)
-    await event.findByIdAndDelete(req.params.eventId)
-    res.redirect(`/`)
-}
-
-module.exports.updateEvent = async (req, res) => {
-    await event.findByIdAndUpdate(req.params.eventId, req.body.eventdata)
-    res.redirect(`/event/info/${req.params.eventId}`)
+    let eventx = await event.findByIdAndDelete(req.params.eventId)
+    deleteImages([
+        path.join(`${__dirname}/..`, `/images/events/${eventx.eventBackgroundPic.fileName}`)
+    ])
+    // Remove event from all users
+    // Remove event from  orgOwner
+    res.send(RESPONSE(res.statusMessage, res.statusCode, "Event Deleted"))
 }
 
 
@@ -64,13 +55,14 @@ module.exports.getEvents = async (req, res) => {
 }
 
 module.exports.getEventOwner = async (req, res) => {
-     currentevent= await event.findOne({'_id':req.params.eventId})
-     let {profilePic,fullName,bio,joinedEvents}= await org.findOne({'_id':currentevent.orgId})
-     res.send(profilePic,fullName,bio,joinedEvents)
+    currentevent = await event.findOne({ '_id': req.params.eventId })
+    let orgx = await org.findOne({ '_id': currentevent.orgId })
+    res.send(orgx)
 }
 
 module.exports.getEventMembers = async (req, res) => {
-    res.send(await event.find({eventId:req.params.eventId}))
+    let eventx = await event.find({ eventId: req.params.eventId })
+    res.send({ "eventMembers": eventx.eventMembers })
 }
 
 

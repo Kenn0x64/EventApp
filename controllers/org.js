@@ -3,7 +3,7 @@ const org = require("../models/org")
 const token_collection = require("../models/token")
 const jwt = require("jsonwebtoken")
 const path = require("path")
-const {RESPONSE} = require("../utils/shared_funs")
+const { RESPONSE } = require("../utils/shared_funs")
 const { hashSync, compareSync } = require('bcrypt')
 const { deleteImages } = require('../utils/shared_funs')
 
@@ -27,23 +27,20 @@ module.exports.createOrg = async (req, res) => {
 
 module.exports.deleteOrg = async (req, res) => {
     let orgId = req.logedinOrg.id
-    let orgx=await org.findOne({'_id':orgId}) 
-    
-    deleteImages([ 
+    let orgx = await org.findByIdAndDelete(orgId)
+
+    deleteImages([
         path.join(`${__dirname}/..`, `/images/orgs/org_images/${orgx.orgPic.fileName}`),
         path.join(`${__dirname}/..`, `/images/orgs/background_images/${orgx.orgBackgroundPic.fileName}`)
     ])
 
     await token_collection.deleteMany({ 'orgId': req.logedinOrg.id })
-    
-    await org.findByIdAndDelete(orgId)
 
-    // //delete any event Org made
-    // // deleteOrgEvents_RemoveFromOrgs()
-
+    // Delete any event Org made
+    // DeleteOrgEvents_RemoveFromOrgs()
     res.send(RESPONSE(res.statusMessage, res.statusCode, "Org Deleted"))
 }
- 
+
 module.exports.updateOrg = async (req, res) => {
 
     let orgx = await org.findByIdAndUpdate(req.logedinOrg.id, {
@@ -88,7 +85,7 @@ module.exports.login = async (req, res) => {
         return res.send("Incorrect Email or Password ")
     }
 
-    let AT = jwt.sign({ 
+    let AT = jwt.sign({
         id: loginOrg._id
     }, process.env.ACCESS_TOKEN, { expiresIn: "5m", algorithm: "HS512" })
 

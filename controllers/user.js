@@ -4,13 +4,13 @@ const token_collection = require("../models/token")
 const jwt = require("jsonwebtoken")
 const path = require("path")
 const event = require("../models/event")
-const {RESPONSE} = require("../utils/shared_funs")
+const { RESPONSE } = require("../utils/shared_funs")
 const { hashSync, compareSync } = require('bcrypt')
 const { deleteImages } = require('../utils/shared_funs')
 const { removeUserFormEvents, removeEventFormUsers } = require("../utils/delete_from_arr")
 
 
-module.exports.createUser = async (req, res) => {    
+module.exports.createUser = async (req, res) => {
     await new user({
         ...req.body.userdata,
         profilePic: {
@@ -45,19 +45,17 @@ module.exports.updateUser = async (req, res) => {
 
 module.exports.deleteUser = async (req, res) => {
     let userId = req.logedinUser.id
-    let userx = await user.findOne({ '_id': userId })
+    let userx = await user.findByIdAndDelete(userId)
+
 
     deleteImages([
         path.join(`${__dirname}/..`, `/images/users/${userx.profilePic.fileName}`)
     ])
 
     await token_collection.deleteMany({ 'userId': userId })
-    await user.findByIdAndDelete(userId)
 
-
-    // Remove  user from all events 
-    // removeUserFormEvents(userid)
-
+    // Remove User From all events 
+    
     res.send(RESPONSE(res.statusMessage, res.statusCode, "User Deleted"))
 }
 

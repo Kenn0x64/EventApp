@@ -8,10 +8,6 @@ const eventSchema = new mongoose.Schema({
         },
         url: String,
     },
-    sets: {
-        type: Number,
-        required: [true, 'Invaild Sets']
-    },
     title: {
         type: String,
         required: [true, 'Invaild Event Name']
@@ -30,9 +26,14 @@ const eventSchema = new mongoose.Schema({
         required: [true, "Invaild Start Date&Time"]
     },
     endDateTime: {
+        //2022-12-27T00:00:00.000Z
         type: Date,
         default:Date.now,
         required: [true, "Invaild End Date&Time"]
+    },
+    sets: {
+        type: Number,
+        required: [true, 'Invaild Sets']
     },
     orgId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -44,6 +45,11 @@ const eventSchema = new mongoose.Schema({
         ref: 'users',
         required: [true, 'Invaild MemberId'],
     },
+    eventCerts: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'certs',
+        required: [true, 'Invaild CertId'],
+    }
 })
 
 module.exports = mongoose.model("events", eventSchema);
