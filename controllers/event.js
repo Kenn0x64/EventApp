@@ -66,14 +66,6 @@ module.exports.getEventMembers = async (req, res) => {
 }
 
 
-module.exports.recordCheckin = async (req, res) => {
-    // HOST/event/checkin/:eventid?userid
-}
-
-module.exports.recordCheckout = async (req, res) => {
-    // HOST/event/checkout/:eventid?userid
-}
-
 module.exports.genCerts = async (req, res) => {
     // Generate Certificates Of All Users
     // HOST/event/certificate/:eventid

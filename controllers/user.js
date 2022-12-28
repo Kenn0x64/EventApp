@@ -114,14 +114,36 @@ module.exports.logout = async (req, res) => {
     res.send(RESPONSE(res.statusMessage, res.statusCode, anything.deletedCount <= 0 ? "No Sessions To LogOut" : "Loged Out"))
 }
 
-module.exports.joinEvent = async (req, res) => {
-    // Get id of event from req
-    // Add LoggedIn User To Event
+module.exports.AddUserToEvent = async (req, res) => {
+
+    let userId=req.logedinUser.id
+    let eventId=req.params.eventId
+    let evenx=await event.findById(eventId)
+
+    if (evenx.blackListed.includes(userId)) {
+        res.send("User Is Block ")
+        return
+    }
+
+    //Check For Duplicts....
+    await event.findOneAndUpdate(eventId,{
+        "$push":{eventMembers:userId}
+    })
+    await user.findOneAndUpdate(userId,{
+        "$push":{joinedEvents:eventId}
+    })
+    res.send(RESPONSE(res.statusMessage, res.statusCode,"User Added To Event"))
 }
 
-module.exports.quitEvent = async (req, res) => {
-    // Get Id of event from req
-    // Remove LogedIn User From Event
+module.exports.RemoveUserToEvent = async (req, res) => {
+     //Check For Duplicts....
+    await event.findByIdAndUpdate(req.params.eventId,{
+        "$pull":{eventMembers:req.logedinUser.id}
+    })
+    await user.findByIdAndUpdate(req.logedinUser.id,{
+        "$pull":{joinedEvents:req.params.eventId}
+    })
+    res.send(RESPONSE(res.statusMessage, res.statusCode,"User Removed To Event"))
 }
 
 module.exports.getCertificate = async (req, res) => {

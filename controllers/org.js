@@ -1,5 +1,9 @@
 const express = require("express")()
 const org = require("../models/org")
+const event = require("../models/event")
+const user = require("../models/user")
+
+
 const token_collection = require("../models/token")
 const jwt = require("jsonwebtoken")
 const path = require("path")
@@ -121,9 +125,40 @@ module.exports.logout = async (req, res) => {
     res.send(RESPONSE(res.statusMessage, res.statusCode, anything.deletedCount <= 0 ? "No Sessions To LogOut" : "Loged Out"))
 }
 
-module.exports.removeUserFormEvent = async (req, res) => {
-    // Get UserID From Query String
-    // Get EventID From Params
-    // Remove User From Event
+module.exports.BLUser = async (req, res) => {
+    userId=req.params.userId
+    eventId=req.params.eventId
+
+    // Check If User is there or not
+    await event.findByIdAndUpdate(eventId,{
+        "$pull":{'eventMembers':userId}
+    })
+
+    // Check If User is there or not
+    await user.findByIdAndUpdate(userId,{
+        "$pull":{'joinedEvents':eventId}
+    })
+
+    // Check If User is there or not
+    await event.findByIdAndUpdate(eventId,{
+        "$push":{'blackListed':userId}
+    })
+
+    res.send("User Blocked")
 }
+
+module.exports.UBLUser = async (req, res) => {
+    userId=req.params.userId
+    eventId=req.params.eventId
+
+    // Check If User is there or not
+    await event.findByIdAndUpdate(eventId,{
+        "$pull":{'blackListed':userId}
+    })
+
+    res.send("User UnBlocked")
+
+}
+
+
 

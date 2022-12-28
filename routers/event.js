@@ -39,19 +39,13 @@ router.route('/members/:eventId').get(
     event.getEventMembers)
 
 
+
 router.route('/certificate/:eventId').get(
     authJWT_AT,
     event.genCerts)
 
-router.route('checkin/:eventId').get(
-    // HOST/event/checkin/:eventId ?userid
-    authJWT_AT,
-    event.recordCheckin)
 
-router.route('/checkout/:eventId').get(
-    // HOST/event/checkout/:eventId ?userid
-    authJWT_AT,
-    event.recordCheckout)
+// router.route('/join/:eventId').get(authJWT_AT,event.getUser)
 
 
 

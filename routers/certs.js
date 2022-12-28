@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-const org = require('../controllers/org')
+const cert = require('../controllers/certificates')
 const { authJWT_RT, authJWT_AT } = require("../controllers/auth")
 const { orgImageHandler } = require("../controllers/image")
 
@@ -29,10 +29,16 @@ router.route('/update').patch(
     org.updateOrg)
 
 
+///XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+router.route('checkin/:eventId').get(
+    // HOST/event/checkin/:eventId ?userid
+    authJWT_AT,
+    event.recordCheckin)
 
-router.route('/:userId/:eventId').
-    post(authJWT_AT, org.BLUser).
-    delete(authJWT_AT, org.UBLUser)
+router.route('/checkout/:eventId').get(
+    // HOST/event/checkout/:eventId ?userid
+    authJWT_AT,
+    event.recordCheckout)
 
 
 

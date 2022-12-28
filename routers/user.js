@@ -14,6 +14,9 @@ router.route('/delete').delete(authJWT_AT,user.deleteUser)
 router.route('/profile').get(authJWT_AT,user.getLogedInUser)
 router.route('/profile/:id').get(authJWT_AT,user.getUser)
 
+///
+router.route('/join/:eventId').patch(authJWT_AT,user.AddUserToEvent)
+router.route('/quit/:eventId').delete(authJWT_AT,user.RemoveUserToEvent)
 
 module.exports=router
 

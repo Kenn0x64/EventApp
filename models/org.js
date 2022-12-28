@@ -5,16 +5,26 @@ const orgSchema= new mongoose.Schema({
     orgPic:{
         fileName:{
             type:String,
+            default:"default.png",
             unique:true,
         },
-        url:String,
+        url:{
+            type:String,
+            default: `http://${process.env.HOST}:${process.env.PORT}/uploads/org/orgimage/default.png`,
+            unique:true,
+        },
     },
     orgBackgroundPic:{
         fileName:{
             type:String,
+            default:"default.png",
             unique:true,
         },
-        url:String,
+        url:{
+            type:String,
+            default:`http://${process.env.HOST}:${process.env.PORT}/uploads/org/backgroundImage/default.png`,
+            unique:true,
+        },
     },
     orgName:{
         type:String,

@@ -5,9 +5,14 @@ const userSchema= new mongoose.Schema({
     profilePic:{
         fileName:{
             type:String,
+            default:"default.png",
             unique:true,
         },
-        url:String,
+        url:{
+            type:String,
+            default: `http://${process.env.HOST}:${process.env.PORT}/uploads/users/default.png`,
+            unique:true,
+        },
     },
     fullName:{
         type:String,
@@ -58,7 +63,8 @@ const userSchema= new mongoose.Schema({
     joinedEvents:{
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'events',
-    }
+        required: [true, 'Invaild EventId'],
+    },
 })
  
 module.exports=mongoose.model("users",userSchema);
