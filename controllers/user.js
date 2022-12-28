@@ -4,13 +4,13 @@ const token_collection = require("../models/token")
 const jwt = require("jsonwebtoken")
 const path = require("path")
 const event = require("../models/event")
-const RESPONSE = require("../utils/shared_funs")
+const {RESPONSE} = require("../utils/shared_funs")
 const { hashSync, compareSync } = require('bcrypt')
 const { deleteImages } = require('../utils/shared_funs')
 const { removeUserFormEvents, removeEventFormUsers } = require("../utils/delete_from_arr")
 
 
-module.exports.createUser = async (req, res) => {
+module.exports.createUser = async (req, res) => {    
     await new user({
         ...req.body.userdata,
         profilePic: {

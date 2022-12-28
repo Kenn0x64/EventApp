@@ -3,7 +3,7 @@ const org = require("../models/org")
 const token_collection = require("../models/token")
 const jwt = require("jsonwebtoken")
 const path = require("path")
-const RESPONSE = require("../utils/shared_funs")
+const {RESPONSE} = require("../utils/shared_funs")
 const { hashSync, compareSync } = require('bcrypt')
 const { deleteImages } = require('../utils/shared_funs')
 

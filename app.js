@@ -34,6 +34,8 @@ app.get('/test',(req,res)=>{
 
 const PORT=process.env.PORT || 4000 
 app.listen( PORT, () => {
-    process.stdout.write('\033c');
+    process.stdout.write('\x1Bc');
     console.log(`\n\u2705 Startred Server! [ http://localhost:${PORT}/ ]`)
 })
+
+module.exports=app
