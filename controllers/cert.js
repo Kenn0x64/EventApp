@@ -1,8 +1,6 @@
 const express = require("express")()
-const user = require("../models/certificate")
+const cert = require("../models/cert")
 const {RESPONSE} = require("../utils/shared_funs")
-require('../utils/delete_from_arr')
-
 
 
 module.exports.createCert = async (req, res) => {     

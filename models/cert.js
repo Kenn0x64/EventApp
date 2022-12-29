@@ -1,3 +1,4 @@
+const { number } = require("joi");
 const mongoose = require("mongoose");
 
 const certificateSchema= new mongoose.Schema({
@@ -9,14 +10,11 @@ const certificateSchema= new mongoose.Schema({
         type:Date,
         required:[true,'Invaild Checkout Time'],
     },
-    cert:{
-        fileName: {
-            type: String,
-            unique: true,
-        },
-        url: String,
+    attendedTime:{
+        type:Number,
+        required:[(value)=>{value<0},'Invaild Attendece Time'],
     },
-    sig:{
+    cert:{
         fileName: {
             type: String,
             unique: true,
@@ -40,4 +38,4 @@ const certificateSchema= new mongoose.Schema({
     },
 })
 
-module.exports=mongoose.model("certificates",certificateSchema);
+module.exports=mongoose.model("certs",certificateSchema);

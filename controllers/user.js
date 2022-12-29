@@ -10,13 +10,25 @@ const { deleteImages } = require('../utils/shared_funs')
 const { removeUserFormEvents, removeEventFormUsers } = require("../utils/delete_from_arr")
 
 
+
+function userImages(req, userx={}) {
+    const profilePic = {
+        fileName: req.profilePic,
+        url: `http://${process.env.HOST}:${process.env.PORT}/uploads/users/${req.profilePic}`
+    }
+
+    if (Object.keys(userx).length==0) { return { profilePic }}
+
+    const imagesToDelete = [
+        path.join(`${__dirname}/..`, `/images/users/${userx.profilePic.fileName}`)
+    ]
+    return { profilePic, imagesToDelete }
+}
+
 module.exports.createUser = async (req, res) => {
-    await new user({
+    let userx = await new user({
         ...req.body.userdata,
-        profilePic: {
-            fileName: req.profilePic,
-            url: `http://${process.env.HOST}:${process.env.PORT}/uploads/users/${req.profilePic}`
-        },
+        profilePic: userImages(req).profilePic,
         password: hashSync(req.body.userdata.password, 12)
     }).save()
 
@@ -28,35 +40,22 @@ module.exports.createUser = async (req, res) => {
 module.exports.updateUser = async (req, res) => {
     let userx = await user.findByIdAndUpdate(req.logedinUser.id, {
         ...req.body.userdata,
-        profilePic: {
-            fileName: req.profilePic,
-            url: `http://${process.env.HOST}:${process.env.PORT}/uploads/users/${req.profilePic}`
-        },
+        profilePic: userImages(req).profilePic,
         password: hashSync(req.body.userdata.password, 12)
     })
-
-    deleteImages([
-        path.join(`${__dirname}/..`, `/images/users/${userx.profilePic.fileName}`)
-    ])
-
+    deleteImages(userImages(req, userx).imagesToDelete)
     res.send(RESPONSE(res.statusMessage, res.statusCode, "User Updated"))
 }
 
 
 module.exports.deleteUser = async (req, res) => {
+    // Remove User From all events 
     let userId = req.logedinUser.id
     let userx = await user.findByIdAndDelete(userId)
-
-
-    deleteImages([
-        path.join(`${__dirname}/..`, `/images/users/${userx.profilePic.fileName}`)
-    ])
-
+    deleteImages(userImages(req, userx).imagesToDelete)
     await token_collection.deleteMany({ 'userId': userId })
-
-    // Remove User From all events 
-    
     res.send(RESPONSE(res.statusMessage, res.statusCode, "User Deleted"))
+
 }
 
 module.exports.getUser = async (req, res) => {
@@ -116,9 +115,9 @@ module.exports.logout = async (req, res) => {
 
 module.exports.AddUserToEvent = async (req, res) => {
 
-    let userId=req.logedinUser.id
-    let eventId=req.params.eventId
-    let evenx=await event.findById(eventId)
+    let userId = req.logedinUser.id
+    let eventId = req.params.eventId
+    let evenx = await event.findById(eventId)
 
     if (evenx.blackListed.includes(userId)) {
         res.send("User Is Block ")
@@ -126,24 +125,24 @@ module.exports.AddUserToEvent = async (req, res) => {
     }
 
     //Check For Duplicts....
-    await event.findOneAndUpdate(eventId,{
-        "$push":{eventMembers:userId}
+    await event.findOneAndUpdate(eventId, {
+        "$push": { eventMembers: userId }
     })
-    await user.findOneAndUpdate(userId,{
-        "$push":{joinedEvents:eventId}
+    await user.findOneAndUpdate(userId, {
+        "$push": { joinedEvents: eventId }
     })
-    res.send(RESPONSE(res.statusMessage, res.statusCode,"User Added To Event"))
+    res.send(RESPONSE(res.statusMessage, res.statusCode, "User Added To Event"))
 }
 
 module.exports.RemoveUserToEvent = async (req, res) => {
-     //Check For Duplicts....
-    await event.findByIdAndUpdate(req.params.eventId,{
-        "$pull":{eventMembers:req.logedinUser.id}
+    //Check For Duplicts....
+    await event.findByIdAndUpdate(req.params.eventId, {
+        "$pull": { eventMembers: req.logedinUser.id }
     })
-    await user.findByIdAndUpdate(req.logedinUser.id,{
-        "$pull":{joinedEvents:req.params.eventId}
+    await user.findByIdAndUpdate(req.logedinUser.id, {
+        "$pull": { joinedEvents: req.params.eventId }
     })
-    res.send(RESPONSE(res.statusMessage, res.statusCode,"User Removed To Event"))
+    res.send(RESPONSE(res.statusMessage, res.statusCode, "User Removed To Event"))
 }
 
 module.exports.getCertificate = async (req, res) => {

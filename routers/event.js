@@ -16,7 +16,10 @@ router.route('/owner/:eventId').get(
 
 router.route('/register').post(
     authJWT_AT,
-    eventImageHandler.single('eventBackgroundPic'),
+    eventImageHandler.fields([
+        { name: 'eventBackgroundPic' },
+        { name: 'sig' },
+    ]),
     event.createEvent)
 
 router.route('/update/:eventId').patch(
@@ -46,8 +49,6 @@ router.route('/certificate/:eventId').get(
 
 
 // router.route('/join/:eventId').get(authJWT_AT,event.getUser)
-
-
 
 
 module.exports = router

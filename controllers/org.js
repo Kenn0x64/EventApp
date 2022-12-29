@@ -11,63 +11,65 @@ const { RESPONSE } = require("../utils/shared_funs")
 const { hashSync, compareSync } = require('bcrypt')
 const { deleteImages } = require('../utils/shared_funs')
 
+function orgImages(req, orgx={}) {
+    const orgPic = {
+        fileName: req.orgPic,
+        url: `http://${process.env.HOST}:${process.env.PORT}/uploads/orgs/org_images/${req.orgPic}`
+    }
+
+    const orgBackgroundPic = {
+        fileName: req.orgBackgroundPic,
+        url: `http://${process.env.HOST}:${process.env.PORT}/uploads/orgs/background_images/${req.orgBackgroundPic}`
+    }
+
+    
+    if (Object.keys(orgx).length==0) {return { orgPic, orgBackgroundPic  }}
+
+    const imagesToDelete = [
+        path.join(`${__dirname}/..`, `/images/orgs/org_images/${orgx.orgPic.fileName}`),
+        path.join(`${__dirname}/..`, `/images/orgs/background_images/${orgx.orgBackgroundPic.fileName}`)
+    ]
+
+    return { orgPic, orgBackgroundPic, imagesToDelete }
+
+}
 module.exports.createOrg = async (req, res) => {
-    await new org({
+    let orgx = await new org({
         ...req.body.orgdata,
-        orgPic: {
-            fileName: req.orgPic,
-            url: `http://${process.env.HOST}:${process.env.PORT}/uploads/org/orgimage/${req.orgPic}`
-        },
-        orgBackgroundPic:
-        {
-            fileName: req.orgBackgroundPic,
-            url: `http://${process.env.HOST}:${process.env.PORT}/uploads/org/backgroundImage/${req.orgBackgroundPic}`
-        },
+        orgPic: orgImages(req).orgPic,
+        orgBackgroundPic: orgImages(req).orgBackgroundPic,
         password: hashSync(req.body.orgdata.password, 12)
     }).save()
 
     res.send(RESPONSE(res.statusMessage, res.statusCode, "Org Created"))
 }
 
+module.exports.updateOrg = async (req, res) => {
+
+    let orgx = await org.findByIdAndUpdate(req.logedinOrg.id, {
+        ...req.body.orgdata,
+        orgPic: orgImages(req).orgPic,
+        orgBackgroundPic: orgImages(req).orgBackgroundPic,
+        password: hashSync(req.body.orgdata.password, 12)
+    })
+
+    deleteImages(orgImages(req, orgx).imagesToDelete)
+    res.send(RESPONSE(res.statusMessage, res.statusCode, "Org Updated"))
+}
+
 module.exports.deleteOrg = async (req, res) => {
     let orgId = req.logedinOrg.id
     let orgx = await org.findByIdAndDelete(orgId)
 
-    deleteImages([
-        path.join(`${__dirname}/..`, `/images/orgs/org_images/${orgx.orgPic.fileName}`),
-        path.join(`${__dirname}/..`, `/images/orgs/background_images/${orgx.orgBackgroundPic.fileName}`)
-    ])
+    deleteImages(orgImages(req, orgx).imagesToDelete)
 
-    await token_collection.deleteMany({ 'orgId': req.logedinOrg.id })
+    await token_collection.deleteMany({ 'orgId': orgId })
 
     // Delete any event Org made
     // DeleteOrgEvents_RemoveFromOrgs()
     res.send(RESPONSE(res.statusMessage, res.statusCode, "Org Deleted"))
 }
 
-module.exports.updateOrg = async (req, res) => {
-
-    let orgx = await org.findByIdAndUpdate(req.logedinOrg.id, {
-        ...req.body.orgdata,
-        orgPic: {
-            fileName: req.orgPic,
-            url: `http://${process.env.HOST}:${process.env.PORT}/uploads/org/orgimage/${req.orgPic}`
-        },
-        orgBackgroundPic:
-        {
-            fileName: req.orgBackgroundPic,
-            url: `http://${process.env.HOST}:${process.env.PORT}/uploads/org/backgroundImage/${req.orgBackgroundPic}`
-        },
-        password: hashSync(req.body.orgdata.password, 12)
-    })
-
-    deleteImages([
-        path.join(`${__dirname}/..`, `/images/orgs/org_images/${orgx.orgPic.fileName}`),
-        path.join(`${__dirname}/..`, `/images/orgs/background_images/${orgx.orgBackgroundPic.fileName}`)
-    ])
-
-    res.send(RESPONSE(res.statusMessage, res.statusCode, "Org Updated"))
-}
 
 module.exports.getOrg = async (req, res) => {
     res.send(await org.findOne({ '_id': req.params.id }))
@@ -126,34 +128,34 @@ module.exports.logout = async (req, res) => {
 }
 
 module.exports.BLUser = async (req, res) => {
-    userId=req.params.userId
-    eventId=req.params.eventId
+    userId = req.params.userId
+    eventId = req.params.eventId
 
     // Check If User is there or not
-    await event.findByIdAndUpdate(eventId,{
-        "$pull":{'eventMembers':userId}
+    await event.findByIdAndUpdate(eventId, {
+        "$pull": { 'eventMembers': userId }
     })
 
     // Check If User is there or not
-    await user.findByIdAndUpdate(userId,{
-        "$pull":{'joinedEvents':eventId}
+    await user.findByIdAndUpdate(userId, {
+        "$pull": { 'joinedEvents': eventId }
     })
 
     // Check If User is there or not
-    await event.findByIdAndUpdate(eventId,{
-        "$push":{'blackListed':userId}
+    await event.findByIdAndUpdate(eventId, {
+        "$push": { 'blackListed': userId }
     })
 
     res.send("User Blocked")
 }
 
 module.exports.UBLUser = async (req, res) => {
-    userId=req.params.userId
-    eventId=req.params.eventId
+    userId = req.params.userId
+    eventId = req.params.eventId
 
     // Check If User is there or not
-    await event.findByIdAndUpdate(eventId,{
-        "$pull":{'blackListed':userId}
+    await event.findByIdAndUpdate(eventId, {
+        "$pull": { 'blackListed': userId }
     })
 
     res.send("User UnBlocked")

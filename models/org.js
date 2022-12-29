@@ -10,7 +10,7 @@ const orgSchema= new mongoose.Schema({
         },
         url:{
             type:String,
-            default: `http://${process.env.HOST}:${process.env.PORT}/uploads/org/orgimage/default.png`,
+            default: `http://${process.env.HOST}:${process.env.PORT}/uploads/orgs/org_images/default.png`,
             unique:true,
         },
     },
@@ -22,7 +22,7 @@ const orgSchema= new mongoose.Schema({
         },
         url:{
             type:String,
-            default:`http://${process.env.HOST}:${process.env.PORT}/uploads/org/backgroundImage/default.png`,
+            default:`http://${process.env.HOST}:${process.env.PORT}/uploads/orgs/background_images/default.png`,
             unique:true,
         },
     },

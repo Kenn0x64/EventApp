@@ -43,11 +43,21 @@ const orgImageHandler = multer({
 const eventImageHandler = multer({
     storage: multer.diskStorage({
         destination: (req, file, fun) => {
+            if (file.fieldname == 'eventBackgroundPic') {
                 fun(null, 'images/events')
+            }
+            else if (file.fieldname == 'sig') {
+                fun(null, 'images/events/sigs')
+            }
         },
         filename: (req, file, fun) => {
             let name = Date.now() + path.extname(file.originalname)
+            if (file.fieldname == 'eventBackgroundPic') {
                 req.eventPic = name
+            }
+            else if (file.fieldname == 'sig') {
+                req.sig = name
+            }
             fun(null, name)
         }
     })
@@ -58,7 +68,7 @@ async function sendUserImages(req, res) {
 
     images = path.join(__dirname, '../images')
     image = req.params.imageName
-    
+
     //HOST/uploads/users/ImageName
     res.sendFile(`${images}/users/${image}`)
 }
@@ -66,11 +76,11 @@ async function sendUserImages(req, res) {
 
 
 async function sendOrgImages(req, res) {
-    
+
     images = path.join(__dirname, '../images/orgs')
     image = req.params.imageName
-    o_bg= (req.params.o_bg).toLowerCase()
-   
+    o_bg = (req.params.o_bg).toLowerCase()
+
     if (o_bg == 'orgimage') {
         //HOST/uploads/orgs/orgImage/ImageName
         res.sendFile(`${images}/org_images/${image}`)
@@ -79,7 +89,7 @@ async function sendOrgImages(req, res) {
         //HOST/uploads/org/backgroundImage/ImageName
         res.sendFile(`${images}/background_images/${image}`)
     }
-    else{
+    else {
         res.send("Hmm Something Is Not Right?")
     }
 }
@@ -87,20 +97,24 @@ async function sendOrgImages(req, res) {
 
 async function sendEventImages(req, res) {
 
-    images = path.join(__dirname, '../images')
+    images = path.join(__dirname, '../images/events')
     image = req.params.imageName
-    
-    //HOST/uploads/users/ImageName
-    res.sendFile(`${images}/events/${image}`)
+    e_s = (req.params.e_s).toLowerCase()
+
+    if (e_s == '') {
+        //HOST/uploads/event/ImageName
+        res.sendFile(`${images}/${image}`)
+    }
+    else if (e_s == 'sig') {
+        //HOST/uploads/events/sig/ImageName
+        res.sendFile(`${images}/sigs/${image}`)
+    }
+    else {
+        res.send("Hmm Something Is Not Right?")
+    }
 }
 
-
-
-
 module.exports = {
-    sendUserImages,
-    sendOrgImages,
-    sendEventImages,
     orgImageHandler,
     userImageHandler,
     eventImageHandler,

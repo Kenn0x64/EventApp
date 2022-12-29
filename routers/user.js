@@ -19,5 +19,3 @@ router.route('/join/:eventId').patch(authJWT_AT,user.AddUserToEvent)
 router.route('/quit/:eventId').delete(authJWT_AT,user.RemoveUserToEvent)
 
 module.exports=router
-
-  

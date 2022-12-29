@@ -8,6 +8,13 @@ const eventSchema = new mongoose.Schema({
         },
         url: String,
     },
+    sig:{
+        fileName: {
+            type: String,
+            unique: true,
+        },
+        url: String,
+    },
     title: {
         type: String,
         required: [true, 'Invaild Event Name']
@@ -30,6 +37,11 @@ const eventSchema = new mongoose.Schema({
         type: Date,
         default:Date.now,
         required: [true, "Invaild End Date&Time"]
+    },
+    minAttendanceTime: {
+        type: Number,
+        default:1,
+        required: [(value)=>{value<0}, "Invaild Minimum Attendance Time"]
     },
     sets: {
         type: Number,
