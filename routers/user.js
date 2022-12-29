@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router({mergeParams:true});
 const user=require('../controllers/user')
 const {authJWT_RT,authJWT_AT}=require("../controllers/auth")
-const {userImageHandler} =require("../controllers/image")
+const {userImageHandler} =require("../controllers/file_handler")
 
 router.route('/register').post(userImageHandler.single('profilePic'),user.createUser)
 router.route('/login').post(user.login)

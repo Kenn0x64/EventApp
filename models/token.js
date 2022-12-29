@@ -12,9 +12,14 @@ const tokenSchema= new mongoose.Schema({
         default:null
     },
     RT:{
-        type:[String],
+        type:String,
         required:[true,'Invaild RT'],
-    }
+    },
+    imei:{
+        type:String,
+        default:null,
+        required:[false,'Invaild IMEI'],
+    },
 })
 
-module.exports=mongoose.model("TSchema",tokenSchema);
+module.exports=mongoose.model("tokens",tokenSchema);

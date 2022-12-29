@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router({ mergeParams: true });
 const org = require('../controllers/org')
 const { authJWT_RT, authJWT_AT } = require("../controllers/auth")
-const { orgImageHandler } = require("../controllers/image")
+const { orgImageHandler } = require("../controllers/file_handler")
 
 router.route('/login').post(org.login)
 router.route('/logout').post(authJWT_RT, org.logout)

@@ -1,4 +1,5 @@
 const fs=require('fs')
+const crypto= require("crypto")
 
 function RESPONSE(status,code,result) {
     return {
@@ -26,8 +27,18 @@ function handle(fun) {
 }
 
 
+function genSessionID() {
+    let time=Date.now()
+    let rd=crypto.randomBytes(512).toString('hex')
+    let hmac=crypto.createHmac('sha512',process.env.SEC || "X")
+        .update(`${time}${rd}`)
+        .digest('hex')
+    return`${hmac}${time}${rd}`
+}
+
 module.exports={
     RESPONSE,
     deleteImages,
-    handle
+    handle,
+    genSessionID
 }

@@ -2,7 +2,7 @@
 <p> App for hosting events and inviting people </p>  
 
 ## Backend-Todos 
-- Controllers [Certificate-CertificateFiles]
+- Certificate Controllers
 - Authorization 
 - Vaildation & Sanitazation & Expections 
 

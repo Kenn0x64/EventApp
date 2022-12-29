@@ -13,14 +13,14 @@ function eventImages(req, eventx={}) {
     }
     const sig = {
         fileName: req.sig,
-        url: `http://${process.env.HOST}:${process.env.PORT}/uploads/events/sigs/${req.sig}`
+        url: `http://${process.env.HOST}:${process.env.PORT}/uploads/sigs/${req.sig}`
     }
 
     if (Object.keys(eventx).length==0) { return { eventBackgroundPic, sig, } }
 
     const imagesToDelete = [
         path.join(`${__dirname}/..`, `/images/events/${eventx.eventBackgroundPic.fileName}`),
-        path.join(`${__dirname}/..`, `/images/events/sigs/${eventx.sig.fileName}`)
+        path.join(`${__dirname}/..`, `/public/sigs/${eventx.sig.fileName}`)
     ]
 
     return { eventBackgroundPic, sig, imagesToDelete }

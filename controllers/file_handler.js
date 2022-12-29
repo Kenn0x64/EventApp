@@ -47,7 +47,7 @@ const eventImageHandler = multer({
                 fun(null, 'images/events')
             }
             else if (file.fieldname == 'sig') {
-                fun(null, 'images/events/sigs')
+                fun(null, 'public/sigs')
             }
         },
         filename: (req, file, fun) => {
@@ -58,6 +58,20 @@ const eventImageHandler = multer({
             else if (file.fieldname == 'sig') {
                 req.sig = name
             }
+            fun(null, name)
+        }
+    })
+})
+
+
+const certFileHandler = multer({
+    storage: multer.diskStorage({
+        destination: (req, file, fun) => {
+            fun(null, 'public/certs')
+        },
+        filename: (req, file, fun) => {
+            let name = Date.now() + path.extname(file.originalname)
+            req.cert = name
             fun(null, name)
         }
     })
@@ -118,4 +132,5 @@ module.exports = {
     orgImageHandler,
     userImageHandler,
     eventImageHandler,
+    certFileHandler,
 }

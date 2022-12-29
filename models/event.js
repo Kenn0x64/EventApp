@@ -43,9 +43,19 @@ const eventSchema = new mongoose.Schema({
         default:1,
         required: [(value)=>{value<0}, "Invaild Minimum Attendance Time"]
     },
+    eventType:{
+        type: [String],
+        default:['Conference','Seminar'],
+        required: [true, 'Invaild Type']
+    },
     sets: {
         type: Number,
         required: [true, 'Invaild Sets']
+    },
+    numOfAttenders: {
+        type: Number,
+        default:0,
+        required: [true, 'Invaild Num Of Attenders']
     },
     orgId: {
         type: mongoose.Schema.Types.ObjectId,

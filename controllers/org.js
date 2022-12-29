@@ -11,7 +11,7 @@ const { RESPONSE } = require("../utils/shared_funs")
 const { hashSync, compareSync } = require('bcrypt')
 const { deleteImages } = require('../utils/shared_funs')
 
-function orgImages(req, orgx={}) {
+function orgImages(req, orgx = {}) {
     const orgPic = {
         fileName: req.orgPic,
         url: `http://${process.env.HOST}:${process.env.PORT}/uploads/orgs/org_images/${req.orgPic}`
@@ -22,8 +22,8 @@ function orgImages(req, orgx={}) {
         url: `http://${process.env.HOST}:${process.env.PORT}/uploads/orgs/background_images/${req.orgBackgroundPic}`
     }
 
-    
-    if (Object.keys(orgx).length==0) {return { orgPic, orgBackgroundPic  }}
+
+    if (Object.keys(orgx).length == 0) { return { orgPic, orgBackgroundPic } }
 
     const imagesToDelete = [
         path.join(`${__dirname}/..`, `/images/orgs/org_images/${orgx.orgPic.fileName}`),
@@ -93,27 +93,20 @@ module.exports.login = async (req, res) => {
 
     let AT = jwt.sign({
         id: loginOrg._id
-    }, process.env.ACCESS_TOKEN, { expiresIn: "5m", algorithm: "HS512" })
+    }, process.env.ACCESS_TOKEN, { expiresIn: "15m", algorithm: "HS512" })
 
     let RT = jwt.sign({
+        id: loginOrg._id,
         email: loginOrg.email,
-        id: loginOrg._id
+        imei: "NULL",
     }, process.env.REFRESH_TOKEN, { expiresIn: "2w", algorithm: "HS512" })
 
 
-    let islogedIn = await token_collection.findOne({ 'orgId': loginOrg._id })
-
-    if (islogedIn != null) {
-        await token_collection.findByIdAndUpdate(islogedIn._id, {
-            $push: { "RT": RT }
-        })
-    }
-    else {
-        await new token_collection({
-            'orgId': loginOrg._id,
-            'RT': RT,
-        }).save()
-    }
+    await new token_collection({
+        orgId: loginOrg._id,
+        imei: "NULL",
+        RT: RT,
+    }).save()
 
     res.send(RESPONSE(res.statusMessage, res.statusCode, {
         AT: "Bearer " + AT,
@@ -123,8 +116,12 @@ module.exports.login = async (req, res) => {
 
 
 module.exports.logout = async (req, res) => {
-    let anything = await token_collection.deleteMany({ 'orgId': req.logedinOrg.id })
-    res.send(RESPONSE(res.statusMessage, res.statusCode, anything.deletedCount <= 0 ? "No Sessions To LogOut" : "Loged Out"))
+    await token_collection.findOneAndDelete({
+         'orgId': req.logedinOrg.id,
+          'RT':req.RT
+        })
+
+    res.send(RESPONSE(res.statusMessage, res.statusCode, "Loged Out"))
 }
 
 module.exports.BLUser = async (req, res) => {

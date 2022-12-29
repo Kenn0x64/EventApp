@@ -11,13 +11,13 @@ const { removeUserFormEvents, removeEventFormUsers } = require("../utils/delete_
 
 
 
-function userImages(req, userx={}) {
+function userImages(req, userx = {}) {
     const profilePic = {
         fileName: req.profilePic,
         url: `http://${process.env.HOST}:${process.env.PORT}/uploads/users/${req.profilePic}`
     }
 
-    if (Object.keys(userx).length==0) { return { profilePic }}
+    if (Object.keys(userx).length == 0) { return { profilePic } }
 
     const imagesToDelete = [
         path.join(`${__dirname}/..`, `/images/users/${userx.profilePic.fileName}`)
@@ -77,29 +77,22 @@ module.exports.login = async (req, res) => {
         return res.send("Incorrect Email or Password ")
     }
 
-    let AT = jwt.sign({
+    const AT = jwt.sign({
         id: loginUser._id
-    }, process.env.ACCESS_TOKEN, { expiresIn: "5m", algorithm: "HS512" })
+    }, process.env.ACCESS_TOKEN, { expiresIn: "15m", algorithm: "HS512" })
 
-    let RT = jwt.sign({
+    const RT = jwt.sign({
+        id: loginUser._id,
         email: loginUser.email,
-        id: loginUser._id
+        imei:"NULL"
     }, process.env.REFRESH_TOKEN, { expiresIn: "2w", algorithm: "HS512" })
 
 
-    let islogedIn = await token_collection.findOne({ 'userId': loginUser._id })
-
-    if (islogedIn != null) {
-        await token_collection.findByIdAndUpdate(islogedIn._id, {
-            $push: { "RT": RT }
-        })
-    }
-    else {
-        await new token_collection({
-            'userId': loginUser._id,
-            'RT': RT,
-        }).save()
-    }
+    await new token_collection({
+        userId: loginUser._id,
+        imei:"NULL",
+        RT: RT,
+    }).save()
 
     res.send(RESPONSE(res.statusMessage, res.statusCode, {
         AT: "Bearer " + AT,
@@ -109,8 +102,12 @@ module.exports.login = async (req, res) => {
 
 
 module.exports.logout = async (req, res) => {
-    let anything = await token_collection.deleteMany({ 'userId': req.logedinUser.id })
-    res.send(RESPONSE(res.statusMessage, res.statusCode, anything.deletedCount <= 0 ? "No Sessions To LogOut" : "Loged Out"))
+    await token_collection.deleteMany({ 
+        'userId': req.logedinUser.id,
+        'RT':req.RT
+    })
+
+    res.send(RESPONSE(res.statusMessage, res.statusCode,"Loged Out"))
 }
 
 module.exports.AddUserToEvent = async (req, res) => {
