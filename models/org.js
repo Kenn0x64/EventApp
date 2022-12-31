@@ -1,67 +1,70 @@
 const { number, bool } = require("joi");
 const mongoose = require("mongoose");
 
-const orgSchema= new mongoose.Schema({
-    orgPic:{
-        fileName:{
-            type:String,
-            default:"default.png",
-            unique:true,
+const orgSchema = new mongoose.Schema({
+    orgPic: {
+        fileName: {
+            type: String,
+            default: "default.png",
+            unique: true,
         },
-        url:{
-            type:String,
+        url: {
+            type: String,
             default: `http://${process.env.HOST}:${process.env.PORT}/uploads/orgs/org_images/default.png`,
-            unique:true,
+            unique: true,
         },
     },
-    orgBackgroundPic:{
-        fileName:{
-            type:String,
-            default:"default.png",
-            unique:true,
+    orgBackgroundPic: {
+        fileName: {
+            type: String,
+            default: "default.png",
+            unique: true,
         },
-        url:{
-            type:String,
-            default:`http://${process.env.HOST}:${process.env.PORT}/uploads/orgs/background_images/default.png`,
-            unique:true,
+        url: {
+            type: String,
+            default: `http://${process.env.HOST}:${process.env.PORT}/uploads/orgs/background_images/default.png`,
+            unique: true,
         },
     },
-    orgName:{
-        type:String,
-        required:[true,' Invaild FullName']
+    orgName: {
+        type: String,
+        required: [true, ' Invaild FullName']
     },
-    email:{
-        type:String,
-        required:[true,'Invaild Email'],
-        unique:true,
-        lowercase:true,
-    }, 
-    password:{
-        type:String,
-        required:[true,'Invaild Password'],
+    email: {
+        type: String,
+        required: [true, 'Invaild Email'],
+        unique: true,
+        lowercase: true,
     },
-    phoneNumber:{
-        type:Number,
-        unique:true,
-        required:[true,'Invaild Phone Number']
+    password: {
+        type: String,
+        required: [true, 'Invaild Password'],
     },
-    bio:{
-        type:String,
-        default:"None",
-        required:[true,'Invaild Profile Bio'],
+    phoneNumber: {
+        type: Number,
+        unique: true,
+        required: [true, 'Invaild Phone Number Or Phone Number Is Already Used']
     },
-    org_type:{
-        type:String,
-        required:[true,'Invaild Org Type'],
+    bio: {
+        type: String,
+        default: "None",
     },
-    location:{
-        type:String,
-        default:"None"
+    org_type: {
+        // ['Organization','University', 'Company'],
+        type: Number,
+        default: 0,
+        enum:[0,1,2]
     },
-    orgEvents:{
+    location: {
+        type: String,
+        default: "None"
+    },
+    orgEvents: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'events',
+        unique:true,
+        required: [true, 'Invaild EventId'],
     }
 })
- 
-module.exports=mongoose.model("orgs",orgSchema);
+
+module.exports = mongoose.model("Organizations", orgSchema);

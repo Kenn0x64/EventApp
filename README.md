@@ -1,26 +1,38 @@
 # EventApp
 <p> App for hosting events and inviting people </p>  
 
-## Backend-Todos 
-- Certificate Controllers
+
+## Todos 
+
+### Back-End
+- Certificate Generation 
 - Authorization 
 - Vaildation & Sanitazation & Expections 
 
 
-## Flutter App
-### Screens
+### Front-End 
+
+#### User App
 - Login
-- Home
-- SignUp
-- View-Edit User
-- Invited Users
-- Event Members
-- Event Home
-- Event Createtion
-- View-Edit Event
-....etc
-### Todos
-- QR Code Genrator
+- SingUp
+- Home Screen
+- Event Screen
+- User Profile
+- Update Profile
+- ??????
+
+#### Organization App
+- Login
+- SingUp
+- Home Screen
+- Event
+- Create Event
+- Update Event
+- Organization Profile
+- Update Profile
+- ??????
+
+
 
 
 

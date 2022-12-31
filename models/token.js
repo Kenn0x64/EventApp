@@ -3,13 +3,13 @@ const mongoose = require("mongoose");
 const tokenSchema= new mongoose.Schema({
     userId:{
         type:mongoose.Schema.Types.ObjectId,
+        default:null,
         ref:'users',
-        default:null
     },
     orgId:{
         type:mongoose.Schema.Types.ObjectId,
+        default:null,
         ref:'orgs',
-        default:null
     },
     RT:{
         type:String,
@@ -18,8 +18,7 @@ const tokenSchema= new mongoose.Schema({
     imei:{
         type:String,
         default:null,
-        required:[false,'Invaild IMEI'],
     },
 })
 
-module.exports=mongoose.model("tokens",tokenSchema);
+module.exports=mongoose.model("Tokens",tokenSchema);

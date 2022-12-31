@@ -8,7 +8,7 @@ const eventSchema = new mongoose.Schema({
         },
         url: String,
     },
-    sig:{
+    sig: {
         fileName: {
             type: String,
             unique: true,
@@ -21,65 +21,91 @@ const eventSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: [true, 'Invaild Discription']
+        default: 'None'
     },
     location: {
         type: String,
-        required: [true, 'Invaild Event Location']
+        default: 'None'
+    },
+    status: {
+        // ['Upcoming', 'Open', 'Passed']
+        type: Number,
+        default: 0,
+        enum: [0, 1, 2]
+    },
+    eventType: {
+        //['Conference', 'Seminar']
+        type: Number,
+        default: 0,
+        enum: [0, 1]
     },
     startDateTime: {
+        //2022-12-27T00:00:00.000Z
         type: Date,
-        default:Date.now,
         required: [true, "Invaild Start Date&Time"]
     },
     endDateTime: {
         //2022-12-27T00:00:00.000Z
         type: Date,
-        default:Date.now,
         required: [true, "Invaild End Date&Time"]
     },
     minAttendanceTime: {
         type: Number,
-        default:1,
-        required: [(value)=>{value<0}, "Invaild Minimum Attendance Time"]
-    },
-    eventType:{
-        type: [String],
-        default:['Conference','Seminar'],
-        required: [true, 'Invaild Type']
+        default: 0,
+        validate: {
+            validator: (value) => {
+                return value >= 0
+            },
+            message: 'Invaild Minimum Attendance Time'
+        },
     },
     sets: {
         type: Number,
-        required: [true, 'Invaild Sets']
+        default: 1,
+        validate: {
+            validator: (value) => {
+                return value >= 1
+            },
+            message: 'Invaild Number Of Sets'
+        },
     },
     numOfAttenders: {
         type: Number,
-        default:0,
-        required: [true, 'Invaild Num Of Attenders']
+        default: 0,
+        validate: {
+            validator: (value) => {
+                return value >= 0
+            },
+            message: 'Invaild Number Of Attenders'
+        },
     },
     orgId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'orgs',
+        unique:true,
         required: [true, 'Invaild OrgId'],
     },
     eventMembers: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'users',
+        unique:true,
         required: [true, 'Invaild MemberId'],
     },
     eventCerts: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'certs',
+        unique:true,
         required: [true, 'Invaild CertId'],
     },
     blackListed: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'users',
-        required: [true, 'Invaild BLID'],
-    }
+        unique:true,
+        required: [true, 'Invaild BlackList ID'],
+    },
 })
 
-module.exports = mongoose.model("events", eventSchema);
+module.exports = mongoose.model("Events", eventSchema);
 
 
 

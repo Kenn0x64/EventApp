@@ -36,9 +36,20 @@ function genSessionID() {
     return`${hmac}${time}${rd}`
 }
 
+
+function DateNowInMin() {
+    return Math.floor(Date.now()/60000)
+}
+
+function attendedInMin(checkin,checkout) {
+    return checkin-checkout
+}
+
 module.exports={
     RESPONSE,
     deleteImages,
     handle,
-    genSessionID
+    genSessionID,
+    DateNowInMin,
+    attendedInMin
 }

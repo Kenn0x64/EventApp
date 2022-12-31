@@ -5,15 +5,27 @@ const { authJWT_AT } = require("../controllers/auth")
 const { eventImageHandler } = require("../controllers/file_handler")
 
 
-router.route('/').get(
+//GET
+router.route('/').get(authJWT_AT, event.getEvents)
+router.route('/owner/:eventId').get(authJWT_AT, event.getEventOwner)
+
+router.route('/info/:eventId').get(authJWT_AT, event.getEvent)
+router.route('/members/:eventId').get(authJWT_AT, event.getEventMembers)
+
+router.route('/certificate/:eventId').get(authJWT_AT, event.genCerts)
+router.route('/blacklist/:eventId').get(authJWT_AT, event.getBlockedMembers)
+
+
+//PATCH
+router.route('/checkin/:eventId').patch(authJWT_AT, event.checkIn)
+router.route('/checkout/:eventId').patch(authJWT_AT, event.checkOut)
+router.route('/update/:eventId').patch(
     authJWT_AT,
-    event.getEvents)
+    eventImageHandler.single('eventBackgroundPic'),
+    event.updateEvent)
 
 
-router.route('/owner/:eventId').get(
-    authJWT_AT,
-    event.getEventOwner)
-
+//POST
 router.route('/register').post(
     authJWT_AT,
     eventImageHandler.fields([
@@ -22,33 +34,12 @@ router.route('/register').post(
     ]),
     event.createEvent)
 
-router.route('/update/:eventId').patch(
-    authJWT_AT,
-    eventImageHandler.single('eventBackgroundPic'),
-    event.updateEvent)
 
+
+//DELETE
 router.route('/delete/:eventId').delete(
     authJWT_AT,
     event.deleteEvent)
-
-
-router.route('/info/:eventId').get(
-    authJWT_AT,
-    event.getEvent)
-
-
-router.route('/members/:eventId').get(
-    authJWT_AT,
-    event.getEventMembers)
-
-
-
-router.route('/certificate/:eventId').get(
-    authJWT_AT,
-    event.genCerts)
-
-
-// router.route('/join/:eventId').get(authJWT_AT,event.getUser)
 
 
 module.exports = router

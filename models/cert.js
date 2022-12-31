@@ -1,18 +1,27 @@
-const { number } = require("joi");
 const mongoose = require("mongoose");
 
 const certificateSchema= new mongoose.Schema({
     checkInTime:{
         type:Date,
-        required:[true,'Invaild Checkin Time'],
+        default:new Date(0),
     },
     checkOutTime:{
         type:Date,
-        required:[true,'Invaild Checkout Time'],
+        default:new Date(0),
     },
-    attendedTime:{
+    allowCert:{
+        type:Boolean,
+        default:false
+    },
+    attendedMins:{
         type:Number,
-        required:[(value)=>{value<0},'Invaild Attendece Time'],
+        default:0,
+        validate:{
+            validator:(value)=>{
+                return value>=0
+            },
+            message:"Invaild Attendece Time"
+        }
     },
     cert:{
         fileName: {
@@ -38,4 +47,4 @@ const certificateSchema= new mongoose.Schema({
     },
 })
 
-module.exports=mongoose.model("certs",certificateSchema);
+module.exports=mongoose.model("Certs",certificateSchema);

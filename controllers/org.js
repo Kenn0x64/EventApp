@@ -2,8 +2,7 @@ const express = require("express")()
 const org = require("../models/org")
 const event = require("../models/event")
 const user = require("../models/user")
-
-
+const cert = require("../models/cert")
 const token_collection = require("../models/token")
 const jwt = require("jsonwebtoken")
 const path = require("path")
@@ -34,7 +33,7 @@ function orgImages(req, orgx = {}) {
 
 }
 module.exports.createOrg = async (req, res) => {
-    let orgx = await new org({
+    await new org({
         ...req.body.orgdata,
         orgPic: orgImages(req).orgPic,
         orgBackgroundPic: orgImages(req).orgBackgroundPic,
@@ -45,8 +44,9 @@ module.exports.createOrg = async (req, res) => {
 }
 
 module.exports.updateOrg = async (req, res) => {
+    let orgId=req.logedinOrg.id
 
-    let orgx = await org.findByIdAndUpdate(req.logedinOrg.id, {
+    let orgx = await org.findByIdAndUpdate(orgId, {
         ...req.body.orgdata,
         orgPic: orgImages(req).orgPic,
         orgBackgroundPic: orgImages(req).orgBackgroundPic,
@@ -128,19 +128,23 @@ module.exports.BLUser = async (req, res) => {
     userId = req.params.userId
     eventId = req.params.eventId
 
-    // Check If User is there or not
-    await event.findByIdAndUpdate(eventId, {
-        "$pull": { 'eventMembers': userId }
+    // Check If User is already blocked
+    
+    let eventx=await event.findByIdAndUpdate(eventId, {
+        "$push": { 'blackListed': userId },
+        "$pull": { 'eventMembers': userId },
+        "$inc": {numOfAttenders:-1}
     })
 
     // Check If User is there or not
-    await user.findByIdAndUpdate(userId, {
+    let userx=await user.findByIdAndUpdate(userId, {
         "$pull": { 'joinedEvents': eventId }
     })
 
-    // Check If User is there or not
-    await event.findByIdAndUpdate(eventId, {
-        "$push": { 'blackListed': userId }
+    await cert.findOneAndDelete({
+        userId:userx._id,
+        eventId:eventx._id,
+        orgId:eventx.orgId,
     })
 
     res.send("User Blocked")
@@ -158,6 +162,14 @@ module.exports.UBLUser = async (req, res) => {
     res.send("User UnBlocked")
 
 }
+
+module.exports.getOrgEvents = async (req, res) => {
+    let orgId =req.logedinOrg.id
+    let orgx=await org.findById(orgId)
+    let orgEvents=orgx.orgEvents
+    res.send({"OrgEvents":orgEvents})
+}
+
 
 
 

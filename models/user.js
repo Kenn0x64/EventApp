@@ -31,12 +31,11 @@ const userSchema= new mongoose.Schema({
     phoneNumber:{
         type:Number,
         unique:true,
-        required:[true,'Invaild Phone Number']
+        required:[true,'Invaild Phone Number or Phone Number Is Already Used']
     },
     date_of_birth:{
         //2022-12-27T00:00:00.000Z
         type:Date,
-        default:Date.now,
         required:[true,'Invaild Age'],
     },
     university:{
@@ -58,13 +57,13 @@ const userSchema= new mongoose.Schema({
     bio:{
         type:String,
         default:"None",
-        required:[true,'Invaild Profile Bio'],
     },
     joinedEvents:{
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'events',
+        unique:true,
         required: [true, 'Invaild EventId'],
     },
 })
  
-module.exports=mongoose.model("users",userSchema);
+module.exports=mongoose.model("Users",userSchema);

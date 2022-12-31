@@ -25,7 +25,7 @@ app.post('/RT', authJWT_RT, (req, res) => {
 
     let AT = jwt.sign({
         id: id
-    }, process.env.ACCESS_TOKEN, { expiresIn: "5m", algorithm: "HS512" })
+    }, process.env.ACCESS_TOKEN, { expiresIn: "15m", algorithm: "HS512" })
 
     res.send({
         AT: "Bearer " + AT
