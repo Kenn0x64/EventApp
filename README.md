@@ -1,6 +1,5 @@
 # EventApp
-<p> App for hosting events and inviting people </p>  
-
+<p> App For Hosting Events  </p>  
 
 ## Todos 
 
