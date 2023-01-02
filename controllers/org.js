@@ -152,7 +152,13 @@ module.exports.BLUser = async (req, res) => {
             "$inc": { Attenders: -1 },
             "$inc": { Attended: -1 },
         })
-        
+    }else{
+        await eventx.updateOne({
+            "$push": { 'blackListed': userx._id },
+            "$pull": { 'eventMembers': userx._id },
+            "$pull": { eventCerts: certx._id },
+            "$inc": { Attenders: -1 },
+        })
     }
 
     res.send("User Blocked")
