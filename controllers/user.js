@@ -114,6 +114,11 @@ module.exports.AddUserToEvent = async (req, res) => {
     let eventId = req.params.eventId
     let eventx = await event.findById(eventId)
 
+    if (eventx.blackListed.includes(userId)) {
+        res.send("User Is Blocked ")
+        return
+    }
+
     if (eventx.eventMembers.length>=eventx.sets) {
         res.send("No Sets Left ")
         return   
@@ -124,14 +129,12 @@ module.exports.AddUserToEvent = async (req, res) => {
         return   
     }
 
-    if (eventx.blackListed.includes(userId)) {
-        res.send("User Is Block ")
-        return
-    }
-
+    
     //Check For Duplicts....
     await event.findOneAndUpdate(eventId, {
-        "$push": { eventMembers: userId }
+        "$push": { eventMembers: userId },
+        // "$inc": { Attenders: 1 }
+
     })
     await user.findOneAndUpdate(userId, {
         "$push": { joinedEvents: eventId }
@@ -158,7 +161,9 @@ module.exports.RemoveUserFromEvent = async (req, res) => {
     }
 
     await event.findByIdAndUpdate(eventx._id, {
-        "$pull": { eventMembers: userId }
+        "$pull": { eventMembers: userId },
+        // "$inc": { Attenders: -1 }
+
     })
 
     let userx=await user.findByIdAndUpdate(userId, {

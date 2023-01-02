@@ -110,13 +110,11 @@ module.exports.checkIn = async (req, res) => {
     //Check IF user is blocoked
     let eventId = req.params.eventId
     let userId = req.logedinUser.id
-    
-
-    let eventx = await event.findByIdAndUpdate(eventId, {
-        "$inc": { numOfAttenders: 1 }
+    let eventx = await event.findByIdAndUpdate(eventId,{
+        "$inc":{Attenders:1}
     })
 
-    await cert.findOneAndUpdate({
+    let certx = await cert.findOneAndUpdate({
         userId: userId,
         eventId: eventx._id,
         orgId: eventx.orgId
@@ -135,9 +133,8 @@ module.exports.checkOut = async (req, res) => {
     let userId = req.logedinUser.id
     let checkoutTime = DateNowInMin()
 
-
-    let eventx = await event.findByIdAndUpdate(eventId, {
-        "$inc": { numOfAttenders: -1 }
+    let eventx = await event.findByIdAndUpdate(eventId,{
+        "$inc":{Attenders:-1}
     })
 
     let certx = await cert.findOne({
@@ -146,18 +143,30 @@ module.exports.checkOut = async (req, res) => {
         orgId: eventx.orgId
     })
 
-    let attendedMins=attendedInMin(checkoutTime, certx.checkInTime)
+    let attendedMins = attendedInMin(checkoutTime, certx.checkInTime)
 
-    await certx.updateOne({
-        checkoutTime,
-        attendedMins,
-        allowGen:attendedMins>=eventx.minAttendanceTime? true:false
-    })
+    if (attendedMins >= eventx.minAttendanceTime) {
+
+        await certx.updateOne({
+            checkoutTime,
+            attendedMins,
+            allowGen: attendedMins >= eventx.minAttendanceTime ? true : false
+        })
+
+        await eventx.updateOne({
+            "$inc": { 'Attended': 1 },
+            "$push": { eventCerts: certx._id }
+        })
+
+    } else {
+        await certx.deleteOne()
+    }
 
     res.send("checked Out")
 }
 
 module.exports.genCerts = async (req, res) => {
+    
     // Generate Certificates Of All Users
     // HOST/event/certificate/:eventid
 }

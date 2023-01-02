@@ -69,7 +69,7 @@ const eventSchema = new mongoose.Schema({
             message: 'Invaild Number Of Sets'
         },
     },
-    numOfAttenders: {
+    Attenders: {
         type: Number,
         default: 0,
         validate: {
@@ -79,28 +79,38 @@ const eventSchema = new mongoose.Schema({
             message: 'Invaild Number Of Attenders'
         },
     },
+    Attended: {
+        type: Number,
+        default: 0,
+        validate: {
+            validator: (value) => {
+                return value >= 0
+            },
+            message: 'Invaild Number Of Attended'
+        },
+    },
     orgId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'orgs',
-        unique:true,
+        unique: true,
         required: [true, 'Invaild OrgId'],
     },
     eventMembers: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'users',
-        unique:true,
+        unique: true,
         required: [true, 'Invaild MemberId'],
     },
     eventCerts: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'certs',
-        unique:true,
+        unique: true,
         required: [true, 'Invaild CertId'],
     },
     blackListed: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'users',
-        unique:true,
+        unique: true,
         required: [true, 'Invaild BlackList ID'],
     },
 })

@@ -7,6 +7,7 @@ const userRouter=require("./routers/user")
 const eventRouter=require("./routers/event")
 const orgRouter=require("./routers/org")
 const { authJWT_AT } = require("./controllers/auth")
+const { genCert } = require('./utils/shared_funs');
 
 
 //Settings
@@ -37,9 +38,11 @@ app.get('/test',(req,res)=>{
 })
 
 const PORT=process.env.PORT || 4000 
-app.listen( PORT, () => {
+app.listen( PORT, async () => {
     process.stdout.write('\x1Bc');
     console.log(`\n\u2705 Startred Server! [ http://localhost:${PORT}/ ]`)
+    // await genCert(0)
+
 })
 
 module.exports=app

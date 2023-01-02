@@ -44,7 +44,7 @@ module.exports.createOrg = async (req, res) => {
 }
 
 module.exports.updateOrg = async (req, res) => {
-    let orgId=req.logedinOrg.id
+    let orgId = req.logedinOrg.id
 
     let orgx = await org.findByIdAndUpdate(orgId, {
         ...req.body.orgdata,
@@ -117,9 +117,9 @@ module.exports.login = async (req, res) => {
 
 module.exports.logout = async (req, res) => {
     await token_collection.findOneAndDelete({
-         'orgId': req.logedinOrg.id,
-          'RT':req.RT
-        })
+        'orgId': req.logedinOrg.id,
+        'RT': req.RT
+    })
 
     res.send(RESPONSE(res.statusMessage, res.statusCode, "Loged Out"))
 }
@@ -129,23 +129,31 @@ module.exports.BLUser = async (req, res) => {
     eventId = req.params.eventId
 
     // Check If User is already blocked
-    
-    let eventx=await event.findByIdAndUpdate(eventId, {
-        "$push": { 'blackListed': userId },
-        "$pull": { 'eventMembers': userId },
-        "$inc": {numOfAttenders:-1}
-    })
+
+    let eventx = await event.findById(eventId)
 
     // Check If User is there or not
-    let userx=await user.findByIdAndUpdate(userId, {
+    let userx = await user.findByIdAndUpdate(userId, {
         "$pull": { 'joinedEvents': eventId }
     })
 
-    await cert.findOneAndDelete({
-        userId:userx._id,
-        eventId:eventx._id,
-        orgId:eventx.orgId,
+  let certx= await cert.findOneAndDelete({
+        userId: userx._id,
+        eventId: eventx._id,
+        orgId: eventx.orgId,
     })
+    
+    //check if de attenders or attedeeded
+    if (certx.allowCert) {
+        await eventx.updateOne({
+            "$push": { 'blackListed': userx._id },
+            "$pull": { 'eventMembers': userx._id },
+            "$pull": { eventCerts: certx._id },
+            "$inc": { Attenders: -1 },
+            "$inc": { Attended: -1 },
+        })
+        
+    }
 
     res.send("User Blocked")
 }
@@ -164,10 +172,10 @@ module.exports.UBLUser = async (req, res) => {
 }
 
 module.exports.getOrgEvents = async (req, res) => {
-    let orgId =req.logedinOrg.id
-    let orgx=await org.findById(orgId)
-    let orgEvents=orgx.orgEvents
-    res.send({"OrgEvents":orgEvents})
+    let orgId = req.logedinOrg.id
+    let orgx = await org.findById(orgId)
+    let orgEvents = orgx.orgEvents
+    res.send({ "OrgEvents": orgEvents })
 }
 
 
