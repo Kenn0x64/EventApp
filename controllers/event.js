@@ -1,9 +1,11 @@
+const fs = require('fs')
+const path = require("path") 
 const event = require("../models/event")
+const user = require("../models/user");
 const org = require("../models/org")
-const path = require("path")
 const cert = require("../models/cert")
-const { deleteImages, DateNowInMin, attendedInMin } = require('../utils/shared_funs')
-const { RESPONSE } = require("../utils/shared_funs")
+const PDF = require('pdf-lib').PDFDocument;
+const { deleteImages, DateNowInMin, attendedInMin, RESPONSE } = require('../utils/shared_funs')
 require("express")
 
 function eventImages(req, eventx = {}) {
@@ -110,16 +112,31 @@ module.exports.checkIn = async (req, res) => {
     //Check IF user is blocoked
     let eventId = req.params.eventId
     let userId = req.logedinUser.id
-    let eventx = await event.findByIdAndUpdate(eventId,{
-        "$inc":{Attenders:1}
-    })
+    let eventx = await event.findById(eventId)
+    let userx = await user.findById(userId)
 
-    let certx = await cert.findOneAndUpdate({
+    let newCertName = Date.now() + '.pdf'
+
+    if (eventx.eventMembers.includes(userId) == false && !userx.joinedEvents.includes(userId) == false) {
+        res.send("User Must Join Event First")
+        return
+    }
+
+    let certx = await new cert({
         userId: userId,
         eventId: eventx._id,
-        orgId: eventx.orgId
-    }, {
-        checkInTime: DateNowInMin()
+        orgId: eventx.orgId,
+        checkInTime: DateNowInMin(),
+        cert: {
+            fileName: newCertName,
+            url: `http://${process.env.HOST}:${process.env.PORT}/uploads/certs/${newCertName}`,
+        }
+    }).save()
+
+    let certs = await cert.find({})
+
+    await eventx.updateOne({
+        Attenders: certs.length
     })
 
     res.send("checkedIn")
@@ -128,29 +145,28 @@ module.exports.checkIn = async (req, res) => {
 module.exports.checkOut = async (req, res) => {
 
     //Check IF user is blocoked
+    //Check If User is already checkedout 
 
     let eventId = req.params.eventId
     let userId = req.logedinUser.id
     let checkoutTime = DateNowInMin()
-
-    let eventx = await event.findByIdAndUpdate(eventId,{
-        "$inc":{Attenders:-1}
-    })
+    let eventx = await event.findById(eventId)
 
     let certx = await cert.findOne({
         userId: userId,
         eventId: eventx._id,
-        orgId: eventx.orgId
+        orgId: eventx.orgId,
     })
 
     let attendedMins = attendedInMin(checkoutTime, certx.checkInTime)
+    let allowCert = attendedMins >= eventx.minAttendanceTime
 
-    if (attendedMins >= eventx.minAttendanceTime) {
 
+    if (allowCert) {
         await certx.updateOne({
             checkoutTime,
             attendedMins,
-            allowGen: attendedMins >= eventx.minAttendanceTime ? true : false
+            allowCert: allowCert
         })
 
         await eventx.updateOne({
@@ -159,15 +175,72 @@ module.exports.checkOut = async (req, res) => {
         })
 
     } else {
+        let certs = await cert.find({})
         await certx.deleteOne()
+        await eventx.updateOne({
+            Attenders: certs.length
+        })
     }
 
     res.send("checked Out")
 }
 
 module.exports.genCerts = async (req, res) => {
-    
-    // Generate Certificates Of All Users
-    // HOST/event/certificate/:eventid
+
+    let file = ""
+    let eventId = req.params.eventId
+    let eventx = await event.findById(eventId).populate('eventCerts')
+
+    //set paths
+    let certs = path.join(`${__dirname}/..`, `/public/certs`)
+    let sigs = path.join(`${__dirname}/..`, `/public/sigs`)
+
+    //Confrance->0
+    //read files
+    if (eventx.eventType == 0) {
+        file = fs.readFileSync(`${certs}/con.pdf`)
+    } else {
+        file = fs.readFileSync(`${certs}/sem.pdf`)
+    }
+
+    //check if user has 2 certs?
+    eventx.eventCerts.forEach(async currentCert => {
+        if (
+            currentCert.eventId.toString() == eventx._id.toString() &&
+            currentCert.orgId.toString() == eventx.orgId.toString() &&
+            currentCert.allowCert
+        ) {
+            //load pdf and get page 
+            const pdf = await PDF.load(file)
+            const page = pdf.getPages()[0]
+
+            //load image 
+            const imageBuffer = fs.readFileSync(`${sigs}/${eventx.sig.fileName}`)
+            const pngImage = await pdf.embedPng(imageBuffer)
+
+            let userx = await user.findById(currentCert.userId)
+            let orgx = await org.findById(eventx.orgId)
+
+            //set text size
+            page.setFontSize(18)
+
+            //draw text
+            page.drawText(userx.fullName, { x: 270, y: 630 })
+            page.drawText(eventx.title, { x: 257, y: 570 })
+            page.drawText(new Date().toLocaleDateString(), { x: 257, y: 515 })
+
+            const { width, height } = pngImage.scale(0.3);
+            page.drawImage(pngImage, { x: 190, y: 410, width, height }, page)
+
+            //writeback to file system
+            fs.writeFileSync(`public/certs/${currentCert.cert.fileName}`, await pdf.save())
+
+            await cert.findByIdAndUpdate(currentCert._id, {
+                allowCert: false
+            })
+        }
+    });
+
+    res.send({ "Result": "Generated Certs" })
 }
 

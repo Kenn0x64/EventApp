@@ -1,50 +1,42 @@
 const mongoose = require("mongoose");
+const file = require("./file");
 
-const certificateSchema= new mongoose.Schema({
-    checkInTime:{
-        type:Date,
-        default:new Date(0),
+const certificateSchema = new mongoose.Schema({
+    checkInTime: {
+        type: Date,
+        default: new Date(0),
     },
-    checkOutTime:{
-        type:Date,
-        default:new Date(0),
+    checkOutTime: {
+        type: Date,
+        default: new Date(0),
     },
-    allowCert:{
-        type:Boolean,
-        default:false
+    allowCert: {
+        type: Boolean,
+        default: false
     },
-    attendedMins:{
-        type:Number,
-        default:0,
-        validate:{
-            validator:(value)=>{
-                return value>=0
+    attendedMins: {
+        type: Number,
+        default: 0,
+        validate: {
+            validator: (value) => {
+                return value >= 0
             },
-            message:"Invaild Attendece Time"
+            message: "Invaild Attendece Time"
         }
     },
-    cert:{
-        fileName: {
-            type: String,
-            unique: true,
-        },
-        url: String,
+    cert: file,
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users'
     },
-    userId:{
-        type:mongoose.Schema.Types.ObjectId,
-        unique:true,
-        ref:'users'
+    eventId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Events'
     },
-    eventId:{
-        type:mongoose.Schema.Types.ObjectId,
-        unique:true,
-        ref:'events'
-    },
-    orgId:{
-        type:mongoose.Schema.Types.ObjectId,
-        unique:true,
-        ref:'orgs'
+    orgId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organizations'
     },
 })
 
-module.exports=mongoose.model("Certs",certificateSchema);
+module.exports = mongoose.model("Certs", certificateSchema);

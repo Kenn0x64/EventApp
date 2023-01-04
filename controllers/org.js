@@ -1,14 +1,13 @@
+const path = require("path")
 const express = require("express")()
 const org = require("../models/org")
+const jwt = require("jsonwebtoken")
 const event = require("../models/event")
 const user = require("../models/user")
 const cert = require("../models/cert")
 const token_collection = require("../models/token")
-const jwt = require("jsonwebtoken")
-const path = require("path")
-const { RESPONSE } = require("../utils/shared_funs")
 const { hashSync, compareSync } = require('bcrypt')
-const { deleteImages } = require('../utils/shared_funs')
+const { RESPONSE,deleteImages } = require('../utils/shared_funs')
 
 function orgImages(req, orgx = {}) {
     const orgPic = {
@@ -137,27 +136,28 @@ module.exports.BLUser = async (req, res) => {
         "$pull": { 'joinedEvents': eventId }
     })
 
-  let certx= await cert.findOneAndDelete({
+    let certx = await cert.findOneAndDelete({
         userId: userx._id,
         eventId: eventx._id,
         orgId: eventx.orgId,
     })
-    
+
+    let certs=await cert.find({})
+
     //check if de attenders or attedeeded
     if (certx.allowCert) {
         await eventx.updateOne({
             "$push": { 'blackListed': userx._id },
             "$pull": { 'eventMembers': userx._id },
             "$pull": { eventCerts: certx._id },
-            "$inc": { Attenders: -1 },
             "$inc": { Attended: -1 },
+            Attenders:certs.length ,
         })
-    }else{
+    } else {
         await eventx.updateOne({
             "$push": { 'blackListed': userx._id },
             "$pull": { 'eventMembers': userx._id },
-            "$pull": { eventCerts: certx._id },
-            "$inc": { Attenders: -1 },
+            Attenders:certs.length ,
         })
     }
 

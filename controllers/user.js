@@ -1,13 +1,12 @@
-const express = require("express")()
-const user = require("../models/user")
-const token_collection = require("../models/token")
-const jwt = require("jsonwebtoken")
 const path = require("path")
+const express = require("express")()
+const jwt = require("jsonwebtoken")
+const user = require("../models/user")
 const event = require("../models/event")
 const cert = require("../models/cert")
-const { RESPONSE } = require("../utils/shared_funs")
+const token_collection = require("../models/token")
 const { hashSync, compareSync } = require('bcrypt')
-const { deleteImages } = require('../utils/shared_funs')
+const { RESPONSE, deleteImages } = require('../utils/shared_funs')
 
 function userImages(req, userx = {}) {
     const profilePic = {
@@ -82,13 +81,13 @@ module.exports.login = async (req, res) => {
     const RT = jwt.sign({
         id: loginUser._id,
         email: loginUser.email,
-        imei:"NULL"
+        imei: "NULL"
     }, process.env.REFRESH_TOKEN, { expiresIn: "2w", algorithm: "HS512" })
 
 
     await new token_collection({
         userId: loginUser._id,
-        imei:"NULL",
+        imei: "NULL",
         RT: RT,
     }).save()
 
@@ -100,12 +99,12 @@ module.exports.login = async (req, res) => {
 
 
 module.exports.logout = async (req, res) => {
-    await token_collection.deleteMany({ 
+    await token_collection.deleteMany({
         'userId': req.logedinUser.id,
-        'RT':req.RT
+        'RT': req.RT
     })
 
-    res.send(RESPONSE(res.statusMessage, res.statusCode,"Loged Out"))
+    res.send(RESPONSE(res.statusMessage, res.statusCode, "Loged Out"))
 }
 
 module.exports.AddUserToEvent = async (req, res) => {
@@ -119,67 +118,66 @@ module.exports.AddUserToEvent = async (req, res) => {
         return
     }
 
-    if (eventx.eventMembers.length>=eventx.sets) {
+    if (eventx.eventMembers.length >= eventx.sets) {
         res.send("No Sets Left ")
-        return   
+        return
     }
 
     if (eventx.eventMembers.includes(userId)) {
         res.send("User Already Joined Event")
-        return   
+        return
     }
 
-    
     //Check For Duplicts....
     await event.findOneAndUpdate(eventId, {
         "$push": { eventMembers: userId },
-        // "$inc": { Attenders: 1 }
-
     })
+
     await user.findOneAndUpdate(userId, {
         "$push": { joinedEvents: eventId }
     })
-
-    await new cert({
-     userId:userId,
-     eventId:eventx._id,
-     orgId:eventx.orgId,
-    }).save()
 
     res.send(RESPONSE(res.statusMessage, res.statusCode, "User Added To Event"))
 }
 
 module.exports.RemoveUserFromEvent = async (req, res) => {
-    let userId=req.logedinUser.id
-    let eventId=req.params.eventId
+    let userId = req.logedinUser.id
+    let eventId = req.params.eventId
     let eventx = await event.findById(eventId)
+    let userx = await user.findById(userId)
 
-
-    if (!eventx.eventMembers.includes(userId)) {
+    if (eventx.eventMembers.includes(userId) && userx.joinedEvents.includes(userId)) {
         res.send("User Is Not Event Member")
-        return   
+        return
     }
 
-    await event.findByIdAndUpdate(eventx._id, {
+    await eventx.updateOne({
         "$pull": { eventMembers: userId },
-        // "$inc": { Attenders: -1 }
-
+        "$pull": { eventCerts: userId },
     })
 
-    let userx=await user.findByIdAndUpdate(userId, {
+    await userx.updateOne({
         "$pull": { joinedEvents: eventId }
     })
 
     await cert.findOneAndDelete({
-        userId:userx._id,
-        eventId:eventx._id,
-        orgId:eventx.orgId,
+        userId: userx._id,
+        eventId: eventx._id,
+        orgId: eventx.orgId,
     })
 
     res.send(RESPONSE(res.statusMessage, res.statusCode, "User Removed To Event"))
 }
 
 module.exports.getCertificate = async (req, res) => {
+    let userId = req.logedinUser._id
+    let eventId = req.params.eventId
+    let eventx = await event.findById(eventId).populate('eventCerts')
+    eventx.eventCerts.forEach(cert => {
+        if (cert.userId.toString() == userId.toString()) {
+            res.download(`public/certs/${cert.cert.fileName}`, `${eventx.title}_certificate`)
+        }
+    });
 }
 
 

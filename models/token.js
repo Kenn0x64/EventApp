@@ -4,12 +4,12 @@ const tokenSchema= new mongoose.Schema({
     userId:{
         type:mongoose.Schema.Types.ObjectId,
         default:null,
-        ref:'users',
+        ref:'Users',
     },
     orgId:{
         type:mongoose.Schema.Types.ObjectId,
         default:null,
-        ref:'orgs',
+        ref:'Organizations',
     },
     RT:{
         type:String,

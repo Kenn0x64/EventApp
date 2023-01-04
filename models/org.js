@@ -1,31 +1,10 @@
 const { number, bool } = require("joi");
 const mongoose = require("mongoose");
+const file = require("./file");
 
 const orgSchema = new mongoose.Schema({
-    orgPic: {
-        fileName: {
-            type: String,
-            default: "default.png",
-            unique: true,
-        },
-        url: {
-            type: String,
-            default: `http://${process.env.HOST}:${process.env.PORT}/uploads/orgs/org_images/default.png`,
-            unique: true,
-        },
-    },
-    orgBackgroundPic: {
-        fileName: {
-            type: String,
-            default: "default.png",
-            unique: true,
-        },
-        url: {
-            type: String,
-            default: `http://${process.env.HOST}:${process.env.PORT}/uploads/orgs/background_images/default.png`,
-            unique: true,
-        },
-    },
+    orgPic: file,
+    orgBackgroundPic:file,
     orgName: {
         type: String,
         required: [true, ' Invaild FullName']
@@ -61,8 +40,8 @@ const orgSchema = new mongoose.Schema({
     },
     orgEvents: {
         type: [mongoose.Schema.Types.ObjectId],
-        ref: 'events',
-        unique:true,
+        ref: 'Events',
+        unique:true, 
         required: [true, 'Invaild EventId'],
     }
 })

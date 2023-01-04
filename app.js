@@ -6,8 +6,11 @@ const path=require("path")
 const userRouter=require("./routers/user")
 const eventRouter=require("./routers/event")
 const orgRouter=require("./routers/org")
+const user = require("./models/user");
+const event = require("./models/event");
+const org = require("./models/org");
+const token = require("./models/token");
 const { authJWT_AT } = require("./controllers/auth")
-const { genCert } = require('./utils/shared_funs');
 
 
 //Settings
@@ -35,6 +38,15 @@ app.use('/event',eventRouter)
 
 app.get('/test',(req,res)=>{
     res.send("Test")
+})
+
+
+app.get('/RESET', async (req,res)=>{
+    await user.deleteMany({})
+    await org.deleteMany({})
+    await event.deleteMany({})
+    await token.deleteMany({})
+    res.send("RESETED THE DB")
 })
 
 const PORT=process.env.PORT || 4000 

@@ -7,6 +7,7 @@ const {userImageHandler} =require("../controllers/file_handler")
 //GET
 router.route('/profile').get(authJWT_AT,user.getLogedInUser)
 router.route('/profile/:id').get(authJWT_AT,user.getUser)
+router.route('/cert/:eventId').get(authJWT_AT,user.getCertificate)
 
 //POST
 router.route('/register').post(userImageHandler.single('profilePic'),user.createUser)

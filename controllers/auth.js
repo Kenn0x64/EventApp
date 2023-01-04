@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const token_collection = require("../models/token")
 const user = require("../models/user")
 const org = require("../models/org");
-const event = require("../models/event");
 
 async function user_org(req,userORorg)
 {

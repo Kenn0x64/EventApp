@@ -4,8 +4,7 @@
 ## Todos 
 
 ### Back-End
-- Test
-- Certificate Generation 
+- Add manual to change allowCert field for admin?
 - Authorization 
 - Vaildation & Sanitazation & Expections 
 

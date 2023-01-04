@@ -1,20 +1,9 @@
 const mongoose = require("mongoose");
+const file = require("./file");
 
 const eventSchema = new mongoose.Schema({
-    eventBackgroundPic: {
-        fileName: {
-            type: String,
-            unique: true,
-        },
-        url: String,
-    },
-    sig: {
-        fileName: {
-            type: String,
-            unique: true,
-        },
-        url: String,
-    },
+    eventBackgroundPic: file,
+    sig: file,
     title: {
         type: String,
         required: [true, 'Invaild Event Name']
@@ -91,26 +80,23 @@ const eventSchema = new mongoose.Schema({
     },
     orgId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'orgs',
-        unique: true,
+        ref: 'Organizations',
         required: [true, 'Invaild OrgId'],
     },
     eventMembers: {
         type: [mongoose.Schema.Types.ObjectId],
-        ref: 'users',
-        unique: true,
+        ref: 'Users',
         required: [true, 'Invaild MemberId'],
     },
     eventCerts: {
         type: [mongoose.Schema.Types.ObjectId],
-        ref: 'certs',
+        ref: 'Certs',
         unique: true,
         required: [true, 'Invaild CertId'],
     },
     blackListed: {
         type: [mongoose.Schema.Types.ObjectId],
-        ref: 'users',
-        unique: true,
+        ref: 'Users',
         required: [true, 'Invaild BlackList ID'],
     },
 })
